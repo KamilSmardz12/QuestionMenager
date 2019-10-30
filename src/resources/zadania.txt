@@ -1,0 +1,15 @@
+0 - Stworzenie readme                                   |
+1 - Tworzenie .json według naszego schematu             |
+    Stworzenie deserializera (nasz obiekt do json'a)    |   Kamil
+2 - Czytanie pytan                                      |   Kamil
+3 - Tworzenie dodatkowego pytania                       |   Kamil
+4 - Update pytania                                      |
+5 - Usuwanie pytania                                    |
+6 - Nadpisywanie wersji i daty (w danych formatach)     |
+    Zrobienie wersji konsolowej?                        |
+7 - Stworzenie wersji okienkowej (JavaFX)               |
+8 - Dodanie bazy danych (hibernate)                     |
+9 - CRUD bazy danych                                    |
+
+
+Pakiety co zrobiłem to tylko propozycja możesz je zmieniac na luzie
