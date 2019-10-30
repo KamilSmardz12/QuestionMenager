@@ -2,24 +2,21 @@ package pl.questionMenager.JsonFormater;
 
 import pl.questionMenager.model.Question;
 
-import java.util.List;
 import java.util.Map;
 
 public class TransformerFactory {
 
-    private final String filePath;
-    private final Transformer transformer;
+    private final FileTransformer fileTransformer;
 
     public TransformerFactory(String filePath) {
-        this.filePath = filePath;
-        transformer = new Transformer(filePath);
+        fileTransformer = new FileTransformer(filePath);
     }
 
     public Map<Integer, Question> read() {
-        return transformer.readJsonFromFile();
+        return fileTransformer.readJsonFromFile();
     }
 
     public void save(Map<Integer,Question> questions) {
-        transformer.saveToFile(questions);
+        fileTransformer.saveToFile(questions);
     }
 }

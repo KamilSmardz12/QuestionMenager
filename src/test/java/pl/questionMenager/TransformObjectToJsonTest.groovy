@@ -1,16 +1,14 @@
 package pl.questionMenager
 
-import pl.questionMenager.JsonFormater.Transformer
+import pl.questionMenager.JsonFormater.FileTransformer
 import pl.questionMenager.model.Question
 import spock.lang.Specification
-
-import javax.json.JsonObject
 
 class TransformObjectToJsonTest extends Specification {
 
     def "test saveJsonToFile"() {
         given:
-        Transformer transformObjectToJson = new Transformer()
+        FileTransformer transformObjectToJson = new FileTransformer()
         Map<Integer,Question> mapOfQuestion = Mock()
 
         when:
@@ -22,7 +20,7 @@ class TransformObjectToJsonTest extends Specification {
 
     def "if read jeson from file return list of question"() {
         given:
-        Transformer transformObjectToJson = new Transformer();
+        FileTransformer transformObjectToJson = new FileTransformer();
 
         when:
         def shouldReturnListOfQuestion = transformObjectToJson.readJsonFromFile()

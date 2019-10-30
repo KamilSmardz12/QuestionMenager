@@ -3,14 +3,15 @@ package pl.questionMenager.controler;
 import pl.questionMenager.model.Question;
 
 import java.util.List;
+import java.util.Map;
 
 public class CrudQuestionFactory {
-    List<Question> questionList;
+    Map<Integer, Question> questions;
     CrudQuestion crudQuestion;
 
-    public CrudQuestionFactory(List<Question> questionList) {
-        this.questionList = questionList;
-        this.crudQuestion = new CrudQuestion(questionList);
+    public CrudQuestionFactory(Map<Integer, Question> questions) {
+        this.questions = questions;
+        this.crudQuestion = new CrudQuestion(questions);
     }
 
     public Question create(String question, String answer){

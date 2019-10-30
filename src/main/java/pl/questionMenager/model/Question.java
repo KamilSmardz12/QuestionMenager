@@ -1,16 +1,14 @@
 package pl.questionMenager.model;
 
-import com.sun.istack.internal.NotNull;
-import lombok.Builder;
 import lombok.Data;
+import lombok.NonNull;
 
 @Data
-@Builder
 public class Question {
 
-    @NotNull
+    @NonNull
     private Integer id;
-    @NotNull
+    @NonNull
     private String question;
     private String answer;
 
@@ -19,6 +17,4 @@ public class Question {
         this.question = question;
         this.answer = answer;
     }
-
-    public Question(){}
 }
