@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static pl.questionMenager.Utils.TransformerUtils.*;
+import static pl.questionMenager.utils.TransformerUtils.*;
 
 public class JsonTransformer implements Transformer {
 
