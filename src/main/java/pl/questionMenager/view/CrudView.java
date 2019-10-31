@@ -1,6 +1,6 @@
 package pl.questionMenager.view;
 
-public class View {
+public class CrudView {
 
 
 }

@@ -1,16 +1,18 @@
-package pl.questionMenager.controler;
+package pl.questionMenager.controller;
 
-import pl.questionMenager.controler.file.CrudQuestionFactory;
 import pl.questionMenager.transformer.DataType;
 import pl.questionMenager.transformer.TransformerFactory;
 import pl.questionMenager.transformer.database.DataBaseTransformerFactory;
 import pl.questionMenager.transformer.file.JsonTransformerFactory;
+import pl.questionMenager.view.CrudView;
 
-public class Controller {
+public class DemoController {
+
     private TransformerFactory transformerFactory;
-    private CrudQuestionFactory crudQuestion;
+    private Controller controller;
+    private CrudView view;
 
-    public Controller(DataType dataType) {
+    public DemoController(DataType dataType) {
         checkDataType(dataType);
     }
 
