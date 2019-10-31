@@ -1,22 +1,19 @@
-package pl.questionMenager.JsonFormater;
+package pl.questionMenager.transformer.file;
 
 import pl.questionMenager.TimeTravelClock;
-import pl.questionMenager.Utils.TransformerUtils;
+import pl.questionMenager.transformer.Transformer;
 import pl.questionMenager.model.Question;
-
 
 import javax.json.*;
 import java.io.*;
 import java.time.Clock;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static pl.questionMenager.Utils.TransformerUtils.*;
 
-
-public class FileTransformer {
+public class JsonTransformer implements Transformer {
 
     private static final String VERSION = "version";
     private static final String LAST_UPDATE = "lastUpdate";
@@ -24,37 +21,41 @@ public class FileTransformer {
     private static final String QUESTIONS = "questions";
     private static final String ANSWER = "answer";
     private static final String ID = "id";
-    private static final String DATE_TIME_FORMATTER = "dd-MM-yyyy HH:mm";
     private static final Clock CLOCK = new TimeTravelClock(LocalDateTime.now());
+    private static final String DATE_TIME_FORMATTER = "dd-MM-yy HH:mm";
     private static final String DEFAULT_FILE_PATH = "src/resources/json/questions.json";
 
     private final String filePath;
+    private String version;
 
-    public FileTransformer(String filePath) {
+    public JsonTransformer(String filePath) {
         this.filePath = filePath;
+        validateFile(filePath);
     }
 
-    public FileTransformer() {
+    public JsonTransformer() {
         this.filePath = DEFAULT_FILE_PATH;
+        validateFile(filePath);
     }
 
-    public void saveToFile(Map<Integer, Question> mapOfQuestion) {
+    @Override
+    public void save(Map<Integer, Question> questions) {
         JsonBuilderFactory jsonBuilderFactory = Json.createBuilderFactory(Collections.emptyMap());
-        List<JsonObject> list = new ArrayList<>();
+        List<JsonObject> jsonObjectsList = new ArrayList<>();
 
-        for (int i = 0; i < mapOfQuestion.size(); i++) {
-            list.add(i, jsonBuilderFactory.createObjectBuilder()
-                    .add(QUESTION, mapOfQuestion.get(i).getQuestion())
-                    .add(ANSWER, mapOfQuestion.get(i).getAnswer())
+        for (int i = 0; i < questions.size(); i++) {
+            jsonObjectsList.add(i, jsonBuilderFactory.createObjectBuilder()
+                    .add(QUESTION, questions.get(i).getQuestion())
+                    .add(ANSWER, questions.get(i).getAnswer())
                     .build()
             );
         }
 
-        JsonArray jsonArray = jsonBuilderFactory.createArrayBuilder(list).build();
+        JsonArray jsonArray = jsonBuilderFactory.createArrayBuilder(jsonObjectsList).build();
 
         JsonObject json = jsonBuilderFactory.createObjectBuilder()
-                .add(VERSION, "0.0.1")
-                .add(LAST_UPDATE, TransformerUtils.setPresentDateAndTime(CLOCK, DATE_TIME_FORMATTER))
+                .add(VERSION, calculateVersion(version))
+                .add(LAST_UPDATE, setPresentDateAndTime(CLOCK, DATE_TIME_FORMATTER))
                 .add(QUESTIONS, jsonArray)
                 .build();
 
@@ -65,8 +66,8 @@ public class FileTransformer {
         }
     }
 
-    // argumenty takie jak w transformerFactory
-    public Map<Integer, Question> readJsonFromFile() {
+    @Override
+    public Map<Integer, Question> read() {
 
         Scanner scanner = null;
         JsonReader jsonReader = null;
@@ -78,12 +79,16 @@ public class FileTransformer {
             InputStream inputStream = new ByteArrayInputStream(json.getBytes());
             JsonReaderFactory jsonReaderFactory = Json.createReaderFactory(Collections.emptyMap());
             jsonReader = jsonReaderFactory.createReader(inputStream, UTF_8);
-            JsonArray jsonArray = jsonReader.readObject().getJsonArray(QUESTIONS);
+            JsonObject jsonObject = jsonReader.readObject();
+
+            version = jsonObject.getString(VERSION);
+            JsonArray jsonArray = jsonObject.getJsonArray(QUESTIONS);
 
             for (int i = 0; i < jsonArray.size(); i++) {
-                mapQuestions.put(i,
+                int id = jsonArray.getJsonObject(i).getInt(ID);
+                mapQuestions.put(id,
                         new Question(
-                                jsonArray.getJsonObject(i).getInt(ID),
+                                id,
                                 jsonArray.getJsonObject(i).getString(QUESTION),
                                 jsonArray.getJsonObject(i).getString(ANSWER))
                 );

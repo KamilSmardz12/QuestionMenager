@@ -1,6 +1,6 @@
 package pl.questionMenager
 
-import pl.questionMenager.controler.CrudQuestion
+import pl.questionMenager.controler.file.CrudJson
 import pl.questionMenager.model.Question
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -11,7 +11,7 @@ class CrudFileTest extends Specification {
     def "check if create method create new Question"() {
         given:
         List<Question> questions = [new Question(currentId, question, answer)]
-        CrudQuestion crud = new CrudQuestion(questions)
+        CrudJson crud = new CrudJson(questions)
 
         when:
         crud.create(question, answer)
@@ -38,7 +38,7 @@ class CrudFileTest extends Specification {
                                     new Question(7, "question7", "answer7"),
                                     new Question(8, "question8", "answer8"),
                                     new Question(9, "question9", "answer9")]
-        CrudQuestion crud = new CrudQuestion(questions)
+        CrudJson crud = new CrudJson(questions)
 
         when:
         crud.create("question1", "answer1")

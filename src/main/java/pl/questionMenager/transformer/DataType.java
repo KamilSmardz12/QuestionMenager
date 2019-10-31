@@ -1,16 +1,13 @@
-package pl.questionMenager.Utils;
+package pl.questionMenager.transformer;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-//TODO zamienić na konstruktor i getter w jednym
 @RequiredArgsConstructor
-public enum  DataBaseOrJsonDoZaminyNazwa {
+public enum DataType {
     DATABASE("database"),
     JSON("json");
 
     @Getter
     private final String type;
-
-
 }
