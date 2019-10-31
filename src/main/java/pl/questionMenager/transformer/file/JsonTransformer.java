@@ -73,6 +73,7 @@ public class JsonTransformer implements Transformer {
         JsonReader jsonReader = null;
         Map<Integer, Question> mapQuestions = new LinkedHashMap<>();
 
+        //zmienić na try with resources wszędzie gdzie są strumienie!
         try {
             scanner = new Scanner(new File(filePath));
             String json = scanner.nextLine();

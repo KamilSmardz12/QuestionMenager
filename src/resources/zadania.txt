@@ -1,8 +1,8 @@
 0 - Stworzenie readme                                   |
 1 - Tworzenie .json według naszego schematu             |
-    Stworzenie deserializera (nasz obiekt do json'a)    |   Kamil
-2 - Czytanie pytan                                      |   Kamil
-3 - Tworzenie dodatkowego pytania                       |   Kamil
+    Stworzenie deserializera (nasz obiekt do json'a)    |
+2 - Czytanie pytan                                      |
+3 - Tworzenie dodatkowego pytania                       |
 4 - Update pytania                                      |
 5 - Usuwanie pytania                                    |
 6 - Nadpisywanie wersji i daty (w danych formatach)     |
