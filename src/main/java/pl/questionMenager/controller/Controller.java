@@ -1,21 +1,31 @@
 package pl.questionMenager.controller;
 
-import pl.questionMenager.model.Question;
+import pl.questionMenager.model.DifficultyLevel;
+
+import java.util.List;
 
 public interface Controller {
+    void create(String question);
+
     void create(String question, String answer);
 
-    void create(String question);
+    void create(DifficultyLevel difficultyLevel, String question);
+
+    void create(DifficultyLevel difficultyLevel, String question, String answer);
+
+    List<String> read(DifficultyLevel difficultyLevel);
 
     String read(int id);
 
-    String read(String question);
-
-    void update(int id, String question, String answer);
-
-    void update(int id, String answer);
-
     void remove(int id);
 
-    void remove(String question);
+    void updateAnswer(int id, String answer);
+
+    void updateQuestion(int id, String question);
+
+    void updateDifficultyLevelAndAnswer(int id, DifficultyLevel difficultyLevel, String answer);
+
+    void updateDifficultyLevelAndQuestion(int id, DifficultyLevel difficultyLevel, String question);
+
+    void updateAnswerAndQuestion(int id, String answer, String question);
 }

@@ -8,18 +8,17 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+//TODO testes
 public class TransformerUtils {
     private TransformerUtils() {
     }
 
-    //TODO testes
     public static String setPresentDateAndTime(Clock clock, String dateTimeFormatter) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateTimeFormatter);
 
         return formatter.format(LocalDateTime.now(clock));
     }
 
-    //TODO testes
     public static String calculateVersion(@NonNull String actualVersion) {
 
         String[] splittedActualVersion = actualVersion.split("\\.");

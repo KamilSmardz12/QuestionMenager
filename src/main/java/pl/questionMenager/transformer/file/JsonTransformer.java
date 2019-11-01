@@ -1,6 +1,7 @@
 package pl.questionMenager.transformer.file;
 
 import pl.questionMenager.TimeTravelClock;
+import pl.questionMenager.model.DifficultyLevel;
 import pl.questionMenager.transformer.Transformer;
 import pl.questionMenager.model.Question;
 
@@ -21,6 +22,7 @@ public class JsonTransformer implements Transformer {
     private static final String QUESTIONS = "questions";
     private static final String ANSWER = "answer";
     private static final String ID = "id";
+    private static final String DIFFICULTY_LEVEL = "difficultyLevel";
     private static final Clock CLOCK = new TimeTravelClock(LocalDateTime.now());
     private static final String DATE_TIME_FORMATTER = "dd-MM-yy HH:mm";
     private static final String DEFAULT_FILE_PATH = "src/resources/json/questions.json";
@@ -86,10 +88,10 @@ public class JsonTransformer implements Transformer {
             JsonArray jsonArray = jsonObject.getJsonArray(QUESTIONS);
 
             for (int i = 0; i < jsonArray.size(); i++) {
-                int id = jsonArray.getJsonObject(i).getInt(ID);
-                mapQuestions.put(id,
+                mapQuestions.put(jsonArray.getJsonObject(i).getInt(ID),
                         new Question(
-                                id,
+                                DifficultyLevel.valueOf(
+                                        jsonArray.getJsonObject(i).getString(DIFFICULTY_LEVEL)),
                                 jsonArray.getJsonObject(i).getString(QUESTION),
                                 jsonArray.getJsonObject(i).getString(ANSWER))
                 );

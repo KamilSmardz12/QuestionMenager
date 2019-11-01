@@ -6,14 +6,13 @@ import lombok.NonNull;
 @Data
 public class Question {
 
-    @NonNull
-    private Integer id;
+    private DifficultyLevel difficultyLevel;
     @NonNull
     private String question;
     private String answer;
 
-    public Question(Integer id, String question, String answer) {
-        this.id = id;
+    public Question(DifficultyLevel difficultyLevel, String question, String answer) {
+        this.difficultyLevel = difficultyLevel;
         this.question = question;
         this.answer = answer;
     }
