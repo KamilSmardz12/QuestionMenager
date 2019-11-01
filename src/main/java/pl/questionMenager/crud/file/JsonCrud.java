@@ -1,6 +1,5 @@
 package pl.questionMenager.crud.file;
 
-import lombok.extern.slf4j.Slf4j;
 import pl.questionMenager.crud.Crud;
 import pl.questionMenager.model.DifficultyLevel;
 import pl.questionMenager.model.Question;
@@ -34,7 +33,7 @@ public class JsonCrud implements Crud {
 
     @Override
     public void create(DifficultyLevel difficultyLevel, String question, String answer) {
-        questions.put(maxIdPlusOne(), new Question(difficultyLevel, question, answer));
+        questions.put(generateNextId(), new Question(difficultyLevel, question, answer));
     }
 
     @Override
@@ -129,28 +128,35 @@ public class JsonCrud implements Crud {
         int bound = questions.size() + 1;
         int number = r.nextInt(bound);
 
-        while (!isInQuestion(number)) {
+        while (!isInQuestions(number)) {
             number = r.nextInt(bound);
         }
 
+        System.out.printf("Randomly selected id:%d%n", number);
         return number;
-    }
-
-
-    private boolean isInQuestion(int id) {
-        return questions.containsKey(id);
     }
 
     @Override
     public void remove(int id) {
-        questions.keySet()
-                .removeIf(q -> q.equals(id));
+        if (isInQuestions(id)) {
+            questions.keySet()
+                    .removeIf(q -> q.equals(id));
+            System.out.printf("Deleted question with id equal: %d%n", id);
+        } else {
+            System.out.printf("The question with this id: %d does not exist%n", id);
+        }
     }
 
-    private Integer maxIdPlusOne() {
-        Integer integer = questions.keySet().stream()
+    private boolean isInQuestions(int id) {
+        return questions.containsKey(id);
+    }
+
+    private Integer generateNextId() {
+        Integer newId = questions.keySet().stream()
                 .max(Integer::compareTo)
                 .get();
-        return ++integer;
+
+        System.out.printf("New id generated: %d%n", newId);
+        return ++newId;
     }
 }
