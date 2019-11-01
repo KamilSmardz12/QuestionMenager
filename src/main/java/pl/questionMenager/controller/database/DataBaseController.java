@@ -2,6 +2,7 @@ package pl.questionMenager.controller.database;
 
 import pl.questionMenager.controller.Controller;
 import pl.questionMenager.model.DifficultyLevel;
+import pl.questionMenager.model.Question;
 
 import java.util.List;
 
@@ -34,6 +35,11 @@ public class DataBaseController implements Controller {
 
     @Override
     public String read(int id) {
+        return null;
+    }
+
+    @Override
+    public Question readRandomQuestion() {
         return null;
     }
 

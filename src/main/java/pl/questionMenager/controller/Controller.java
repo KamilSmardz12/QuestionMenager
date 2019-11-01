@@ -1,6 +1,7 @@
 package pl.questionMenager.controller;
 
 import pl.questionMenager.model.DifficultyLevel;
+import pl.questionMenager.model.Question;
 
 import java.util.List;
 
@@ -16,6 +17,8 @@ public interface Controller {
     List<String> read(DifficultyLevel difficultyLevel);
 
     String read(int id);
+
+    Question readRandomQuestion();
 
     void remove(int id);
 

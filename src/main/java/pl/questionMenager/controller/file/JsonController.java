@@ -6,6 +6,7 @@ import pl.questionMenager.model.Question;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 //TODO ograć puste pola (tam gdzie null)
@@ -55,9 +56,22 @@ public class JsonController implements Controller {
     }
 
     @Override
-    public void remove(int id) {
-        questions.keySet()
-                .removeIf(q -> q.equals(id));
+    public Question readRandomQuestion() {
+        Question question = null;
+
+        int number = drawingARandomeNumberFromTheMap();
+
+        for (Map.Entry<Integer, Question> entry : questions.entrySet()) {
+            if (entry.getKey().equals(number)) {
+                Question q = entry.getValue();
+                question = new Question(
+                        q.getDifficultyLevel(),
+                        q.getQuestion(),
+                        q.getAnswer());
+            }
+        }
+
+        return question;
     }
 
     @Override
@@ -107,7 +121,29 @@ public class JsonController implements Controller {
                 });
     }
 
-    //TODO zrobić jakieś mądre generowanie id do pliku
+    private int drawingARandomeNumberFromTheMap() {
+        Random r = new Random();
+        int bound = questions.size() + 1;
+        int number = r.nextInt(bound);
+
+        while (!isInQuestion(number)) {
+            number = r.nextInt(bound);
+        }
+
+        return number;
+    }
+
+
+    private boolean isInQuestion(int id) {
+        return questions.containsKey(id);
+    }
+
+    @Override
+    public void remove(int id) {
+        questions.keySet()
+                .removeIf(q -> q.equals(id));
+    }
+
     private Integer maxIdPlusOne() {
         Integer integer = questions.keySet().stream()
                 .max(Integer::compareTo)
