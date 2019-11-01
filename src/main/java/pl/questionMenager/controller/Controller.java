@@ -3,7 +3,7 @@ package pl.questionMenager.controller;
 import pl.questionMenager.crud.Crud;
 import pl.questionMenager.crud.database.DataBaseCrud;
 import pl.questionMenager.crud.file.JsonCrud;
-import pl.questionMenager.transformer.DataType;
+import pl.questionMenager.model.DataType;
 import pl.questionMenager.transformer.TransformerFactory;
 import pl.questionMenager.transformer.database.DataBaseTransformerFactory;
 import pl.questionMenager.transformer.file.JsonTransformerFactory;
