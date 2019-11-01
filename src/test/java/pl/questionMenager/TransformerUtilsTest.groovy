@@ -29,7 +29,7 @@ class TransformerUtilsTest extends Specification {
     }
 
     @Unroll
-    def "actual version #currentVersion - new vwersion #now"() {
+    def "actual version: #currentVersion - new version: #now"() {
         given:
         String lastUpdate
 
@@ -42,6 +42,7 @@ class TransformerUtilsTest extends Specification {
         where:
         currentVersion | now
         "0.0.1"        | "0.0.2"
+        "0.2.0"        | "0.1.9"
         "0.1.1"        | "0.1.2"
         "1.1.1"        | "1.1.2"
         "0.9.9"        | "1.0.0"

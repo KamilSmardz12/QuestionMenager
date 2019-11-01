@@ -36,6 +36,7 @@ public class TransformerUtils {
      * @param actualVersion version from file
      * @return {@link String} in '\d.\d.\d' format
      */
+    //TODO źle działa
     public static String calculateVersion(@NonNull String actualVersion) {
         String[] splittedActualVersion = actualVersion.split("\\.");
 
