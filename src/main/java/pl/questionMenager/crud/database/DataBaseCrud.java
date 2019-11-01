@@ -29,6 +29,11 @@ public class DataBaseCrud implements Crud {
     }
 
     @Override
+    public List<Question> readAll() {
+        return null;
+    }
+
+    @Override
     public List<Question> read(DifficultyLevel difficultyLevel) {
         return null;
     }

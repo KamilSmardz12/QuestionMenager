@@ -3,6 +3,7 @@ package pl.questionMenager.transformer.file;
 import pl.questionMenager.transformer.TransformerFactory;
 import pl.questionMenager.model.Question;
 
+import java.util.List;
 import java.util.Map;
 
 public class JsonTransformerFactory implements TransformerFactory {
@@ -23,7 +24,7 @@ public class JsonTransformerFactory implements TransformerFactory {
     }
 
     @Override
-    public void save(Map<Integer,Question> questions) {
+    public void save(List<Question> questions) {
         jsonTransformer.save(questions);
     }
 }

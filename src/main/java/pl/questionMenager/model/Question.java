@@ -6,10 +6,10 @@ import lombok.NonNull;
 @Data
 public class Question {
 
-    private DifficultyLevel difficultyLevel;
     @NonNull
     private String question;
     private String answer;
+    private DifficultyLevel difficultyLevel;
 
     public Question(DifficultyLevel difficultyLevel, String question, String answer) {
         this.difficultyLevel = difficultyLevel;

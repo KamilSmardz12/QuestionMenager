@@ -20,6 +20,10 @@ public class Controller {
         return crud;
     }
 
+    public static void save(){
+        transformerFactory.save(crud.readAll());
+    }
+
     private static void checkDataType(DataType dataType) {
         if (dataType == DataType.JSON) {
             transformerFactory = new JsonTransformerFactory();

@@ -41,7 +41,7 @@ public class JsonTransformer implements Transformer {
     }
 
     @Override
-    public void save(Map<Integer, Question> questions) {
+    public void save(List<Question> questions) {
         JsonBuilderFactory jsonBuilderFactory = Json.createBuilderFactory(Collections.emptyMap());
         List<JsonObject> jsonObjectsList = new ArrayList<>();
 

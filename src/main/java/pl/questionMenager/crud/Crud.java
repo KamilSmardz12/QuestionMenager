@@ -14,6 +14,8 @@ public interface Crud {
 
     void create(DifficultyLevel difficultyLevel, String question, String answer);
 
+    List<Question> readAll();
+
     List<Question> read(DifficultyLevel difficultyLevel);
 
     Question read(int id);
@@ -31,4 +33,5 @@ public interface Crud {
     void updateDifficultyLevelAndQuestion(int id, DifficultyLevel difficultyLevel, String question);
 
     void updateAnswerAndQuestion(int id, String answer, String question);
+
 }

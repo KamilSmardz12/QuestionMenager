@@ -4,9 +4,7 @@ import pl.questionMenager.crud.Crud;
 import pl.questionMenager.model.DifficultyLevel;
 import pl.questionMenager.model.Question;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 //TODO ograć puste pola (tam gdzie null)
@@ -36,6 +34,11 @@ public class JsonCrud implements Crud {
     @Override
     public void create(DifficultyLevel difficultyLevel, String question, String answer) {
         questions.put(maxIdPlusOne(), new Question(difficultyLevel, question, answer));
+    }
+
+    @Override
+    public List<Question> readAll() {
+        return new LinkedList<>(questions.values());
     }
 
     @Override
