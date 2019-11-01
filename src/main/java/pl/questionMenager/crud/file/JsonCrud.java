@@ -140,6 +140,7 @@ public class JsonCrud implements Crud {
         return questions.containsKey(id);
     }
 
+    //TODO dodac walidacje (co jesli id takie nie istnieje)
     @Override
     public void remove(int id) {
         questions.keySet()

@@ -2,6 +2,6 @@ package pl.questionMenager
 
 import spock.lang.Specification
 
-class TransformObjectToJsonTest extends Specification {
+class JsonTransforemrTest extends Specification {
 
 }

@@ -61,7 +61,7 @@ public class JsonTransformer implements Transformer {
                 .add(QUESTIONS, jsonArray)
                 .build();
 
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath))) {
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(DEFAULT_FILE_PATH))) {
             bufferedWriter.write(json.toString());
         } catch (IOException e) {
             e.printStackTrace();
@@ -75,15 +75,14 @@ public class JsonTransformer implements Transformer {
         JsonReader jsonReader = null;
         Map<Integer, Question> mapQuestions = new LinkedHashMap<>();
 
-        //zmienić na try with resources wszędzie gdzie są strumienie!
+        //zmienić na try with resources wszędzie gdzie są strumienie
         try {
-            scanner = new Scanner(new File(filePath));
+            scanner = new Scanner(new File(DEFAULT_FILE_PATH));
             String json = scanner.nextLine();
             InputStream inputStream = new ByteArrayInputStream(json.getBytes());
             JsonReaderFactory jsonReaderFactory = Json.createReaderFactory(Collections.emptyMap());
             jsonReader = jsonReaderFactory.createReader(inputStream, UTF_8);
             JsonObject jsonObject = jsonReader.readObject();
-
             version = jsonObject.getString(VERSION);
             JsonArray jsonArray = jsonObject.getJsonArray(QUESTIONS);
 
@@ -100,8 +99,11 @@ public class JsonTransformer implements Transformer {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            scanner.close();
-            jsonReader.close();
+            if (scanner != null) {
+                scanner.close();
+            } else if (jsonReader != null) {
+                jsonReader.close();
+            }
         }
 
         return mapQuestions;
