@@ -9,6 +9,9 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+/**
+ * Class to mock time
+ */
 @EqualsAndHashCode(callSuper = true)
 @Value
 public class TimeTravelClock extends Clock {

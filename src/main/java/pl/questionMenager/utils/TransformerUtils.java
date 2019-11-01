@@ -10,17 +10,29 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
-//TODO testes
+
 public class TransformerUtils {
     private TransformerUtils() {
     }
 
+    /**
+     * Function sets date and time in file to now
+     * @param clock date and time now
+     * @param dateTimeFormatter correct date and time format
+     * @return {@link String}
+     */
     public static String setPresentDateAndTime(Clock clock, String dateTimeFormatter) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateTimeFormatter);
 
         return formatter.format(LocalDateTime.now(clock));
     }
 
+    /**
+     * Function calculate new version to save in file.
+     * First version is 0.0.1. We will increase the version every 0.0.1
+     * @param actualVersion version from file
+     * @return {@link String} in '\d.\d.\d' format
+     */
     public static String calculateVersion(@NonNull String actualVersion) {
 
         String[] splittedActualVersion = actualVersion.split("\\.");
@@ -44,12 +56,20 @@ public class TransformerUtils {
         return String.format("%d.%d.%d", firstValue, middleValue, lastValue);
     }
 
+    /**
+     * Check if file is exist
+     * @param filePath path to file
+     */
     public static void validateFile(@NonNull String filePath){
         if(!isFileExist(filePath)){
             throw new IllegalStateException("You have entered the wrong path to the file!");
         }
     }
 
+    /**
+     * Check if there are questions in the file
+     * @param question
+     */
     public static void isEmptyMap(Map<Integer, Question> question){
         if (question.isEmpty()){
             throw new IllegalStateException("There are no questions!");
