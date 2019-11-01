@@ -74,10 +74,10 @@ public class TransformerUtils {
     /**
      * Check if there are questions in the file
      *
-     * @param question
+     * @param questions questions from data
      */
-    public static void isEmptyMap(Map<Integer, Question> question) {
-        if (question.isEmpty()) {
+    public static void isEmptyMap(Map<Integer, Question> questions) {
+        if (questions.isEmpty()) {
             throw new IllegalStateException("There are no questions!");
         }
     }
