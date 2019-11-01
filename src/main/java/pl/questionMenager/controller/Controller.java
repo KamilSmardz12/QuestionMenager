@@ -1,34 +1,32 @@
 package pl.questionMenager.controller;
 
-import pl.questionMenager.model.DifficultyLevel;
-import pl.questionMenager.model.Question;
+import pl.questionMenager.crud.Crud;
+import pl.questionMenager.crud.database.DataBaseCrud;
+import pl.questionMenager.crud.file.JsonCrud;
+import pl.questionMenager.transformer.DataType;
+import pl.questionMenager.transformer.TransformerFactory;
+import pl.questionMenager.transformer.database.DataBaseTransformerFactory;
+import pl.questionMenager.transformer.file.JsonTransformerFactory;
+import pl.questionMenager.view.CrudView;
 
-import java.util.List;
+public class Controller {
 
-public interface Controller {
-    void create(String question);
+    private static TransformerFactory transformerFactory;
+    private static Crud crud;
+    private static CrudView view;
 
-    void create(String question, String answer);
+    public static Crud create(DataType dataType) {
+        checkDataType(dataType);
+        return crud;
+    }
 
-    void create(DifficultyLevel difficultyLevel, String question);
-
-    void create(DifficultyLevel difficultyLevel, String question, String answer);
-
-    List<String> read(DifficultyLevel difficultyLevel);
-
-    String read(int id);
-
-    Question readRandomQuestion();
-
-    void remove(int id);
-
-    void updateAnswer(int id, String answer);
-
-    void updateQuestion(int id, String question);
-
-    void updateDifficultyLevelAndAnswer(int id, DifficultyLevel difficultyLevel, String answer);
-
-    void updateDifficultyLevelAndQuestion(int id, DifficultyLevel difficultyLevel, String question);
-
-    void updateAnswerAndQuestion(int id, String answer, String question);
+    private static void checkDataType(DataType dataType) {
+        if (dataType == DataType.JSON) {
+            transformerFactory = new JsonTransformerFactory();
+            crud = new JsonCrud(transformerFactory.read());
+        } else if (dataType == DataType.DATABASE) {
+            transformerFactory = new DataBaseTransformerFactory();
+            crud = new DataBaseCrud();
+        }
+    }
 }

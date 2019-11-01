@@ -1,12 +1,12 @@
-package pl.questionMenager.controller.database;
+package pl.questionMenager.crud.database;
 
-import pl.questionMenager.controller.Controller;
+import pl.questionMenager.crud.Crud;
 import pl.questionMenager.model.DifficultyLevel;
 import pl.questionMenager.model.Question;
 
 import java.util.List;
 
-public class DataBaseController implements Controller {
+public class DataBaseCrud implements Crud {
 
     @Override
     public void create(String question) {
@@ -29,12 +29,12 @@ public class DataBaseController implements Controller {
     }
 
     @Override
-    public List<String> read(DifficultyLevel difficultyLevel) {
+    public List<Question> read(DifficultyLevel difficultyLevel) {
         return null;
     }
 
     @Override
-    public String read(int id) {
+    public Question read(int id) {
         return null;
     }
 

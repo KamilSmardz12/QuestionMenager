@@ -1,6 +1,6 @@
-package pl.questionMenager.controller.file;
+package pl.questionMenager.crud.file;
 
-import pl.questionMenager.controller.Controller;
+import pl.questionMenager.crud.Crud;
 import pl.questionMenager.model.DifficultyLevel;
 import pl.questionMenager.model.Question;
 
@@ -10,11 +10,11 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 //TODO ograć puste pola (tam gdzie null)
-public class JsonController implements Controller {
+public class JsonCrud implements Crud {
 
     private final Map<Integer, Question> questions;
 
-    public JsonController(Map<Integer, Question> questions) {
+    public JsonCrud(Map<Integer, Question> questions) {
         this.questions = questions;
     }
 
@@ -31,7 +31,6 @@ public class JsonController implements Controller {
     @Override
     public void create(DifficultyLevel difficultyLevel, String question) {
         create(difficultyLevel, question, null);
-
     }
 
     @Override
@@ -40,19 +39,19 @@ public class JsonController implements Controller {
     }
 
     @Override
-    public List<String> read(DifficultyLevel difficultyLevel) {
+    public List<Question> read(DifficultyLevel difficultyLevel) {
         return questions.values().stream()
                 .filter(q -> q.getDifficultyLevel().equals(difficultyLevel))
-                .map(Question::getQuestion)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public String read(int id) {
+    public Question read(int id) {
         return questions.entrySet().stream()
                 .filter(q -> q.getKey().equals(id))
-                .map(q -> q.getValue().getQuestion())
-                .toString();
+                .map(Map.Entry::getValue)
+                .findFirst()
+                .get();
     }
 
     @Override
