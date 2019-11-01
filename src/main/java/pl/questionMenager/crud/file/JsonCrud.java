@@ -1,5 +1,6 @@
 package pl.questionMenager.crud.file;
 
+import lombok.extern.slf4j.Slf4j;
 import pl.questionMenager.crud.Crud;
 import pl.questionMenager.model.DifficultyLevel;
 import pl.questionMenager.model.Question;

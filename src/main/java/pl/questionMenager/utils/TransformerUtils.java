@@ -41,17 +41,19 @@ public class TransformerUtils {
         int middleValue = Integer.parseInt(splittedActualVersion[1]);
         int firstValue = Integer.parseInt(splittedActualVersion[0]);
 
-        if (middleValue == 99) {
+        if (lastValue == 9) {
+            middleValue++;
+            lastValue = 0;
+        }
+        else {
+            lastValue++;
+        }
+
+        if (middleValue == 10) {
             middleValue = 0;
             firstValue++;
         }
 
-        if (lastValue == 9) {
-            middleValue++;
-            lastValue = 0;
-        } else {
-            lastValue++;
-        }
 
         return String.format("%d.%d.%d", firstValue, middleValue, lastValue);
     }
