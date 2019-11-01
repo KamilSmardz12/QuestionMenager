@@ -1,12 +1,14 @@
 package pl.questionMenager.utils;
 
 import lombok.NonNull;
+import pl.questionMenager.model.Question;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 //TODO testes
 public class TransformerUtils {
@@ -45,6 +47,12 @@ public class TransformerUtils {
     public static void validateFile(@NonNull String filePath){
         if(!isFileExist(filePath)){
             throw new IllegalStateException("You have entered the wrong path to the file!");
+        }
+    }
+
+    public static void isEmptyMap(Map<Integer, Question> question){
+        if (question.isEmpty()){
+            throw new IllegalStateException("There are no questions!");
         }
     }
 

@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 //TODO ograć puste pola (tam gdzie null)
 public class JsonCrud implements Crud {
 
-    private final Map<Integer, Question> questions;
+    private Map<Integer, Question> questions;
 
     public JsonCrud(Map<Integer, Question> questions) {
         this.questions = questions;

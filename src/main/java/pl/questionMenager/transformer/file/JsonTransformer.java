@@ -4,6 +4,7 @@ import pl.questionMenager.TimeTravelClock;
 import pl.questionMenager.model.DifficultyLevel;
 import pl.questionMenager.transformer.Transformer;
 import pl.questionMenager.model.Question;
+import pl.questionMenager.utils.TransformerUtils;
 
 import javax.json.*;
 import java.io.*;
@@ -30,12 +31,12 @@ public class JsonTransformer implements Transformer {
     private final String filePath;
     private String version;
 
-    public JsonTransformer(String filePath) {
+    JsonTransformer(String filePath) {
         this.filePath = filePath;
         validateFile(filePath);
     }
 
-    public JsonTransformer() {
+    JsonTransformer() {
         this.filePath = DEFAULT_FILE_PATH;
         validateFile(filePath);
     }
@@ -103,6 +104,8 @@ public class JsonTransformer implements Transformer {
             scanner.close();
             jsonReader.close();
         }
+
+        TransformerUtils.isEmptyMap(mapQuestions);
 
         return mapQuestions;
     }
