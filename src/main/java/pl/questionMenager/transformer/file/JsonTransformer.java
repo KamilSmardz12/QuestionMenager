@@ -42,27 +42,29 @@ public class JsonTransformer implements Transformer {
 
     @Override
     public void save(List<Question> questions) {
-        JsonBuilderFactory jsonBuilderFactory = Json.createBuilderFactory(Collections.emptyMap());
-        List<JsonObject> jsonObjectsList = new ArrayList<>();
+        JsonObjectBuilder rootJsonBuilder = Json.createObjectBuilder();
+        JsonArrayBuilder questionsArrayBuilder = Json.createArrayBuilder();
 
-        for (int i = 0; i < questions.size(); i++) {
-            jsonObjectsList.add(i, jsonBuilderFactory.createObjectBuilder()
-                    .add(QUESTION, questions.get(i).getQuestion())
-                    .add(ANSWER, questions.get(i).getAnswer())
-                    .build()
-            );
-        }
+        questions.forEach((question) -> {
+            JsonObjectBuilder questionJsonBuilder = Json.createObjectBuilder();
+            JsonObject questionJson = questionJsonBuilder
+                    .add(QUESTION, question.getQuestion())
+                    .add(ANSWER, question.getAnswer())
+                    .build();
 
-        JsonArray jsonArray = jsonBuilderFactory.createArrayBuilder(jsonObjectsList).build();
+            questionsArrayBuilder.add(questionJson);
+        });
 
-        JsonObject json = jsonBuilderFactory.createObjectBuilder()
+        JsonArray questionsArrayJson = questionsArrayBuilder.build();
+
+        JsonObject rootJson = rootJsonBuilder
                 .add(VERSION, calculateVersion(version))
                 .add(LAST_UPDATE, setPresentDateAndTime(CLOCK, DATE_TIME_FORMATTER))
-                .add(QUESTIONS, jsonArray)
+                .add(QUESTIONS, questionsArrayJson)
                 .build();
 
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(DEFAULT_FILE_PATH))) {
-            bufferedWriter.write(json.toString());
+            bufferedWriter.write(rootJson.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -89,8 +91,7 @@ public class JsonTransformer implements Transformer {
             for (int i = 0; i < jsonArray.size(); i++) {
                 mapQuestions.put(jsonArray.getJsonObject(i).getInt(ID),
                         new Question(
-                                DifficultyLevel.valueOf(
-                                        jsonArray.getJsonObject(i).getString(DIFFICULTY_LEVEL)),
+                                DifficultyLevel.valueOf(jsonArray.getJsonObject(i).getString(DIFFICULTY_LEVEL)),
                                 jsonArray.getJsonObject(i).getString(QUESTION),
                                 jsonArray.getJsonObject(i).getString(ANSWER))
                 );
