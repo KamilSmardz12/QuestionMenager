@@ -31,13 +31,13 @@ class TransformerUtilsTest extends Specification {
     @Unroll
     def "actual version: #currentVersion - new version: #now"() {
         given:
-        String lastUpdate
+        String actualVersion
 
         when:
-        lastUpdate = TransformerUtils.calculateVersion(currentVersion)
+        actualVersion = TransformerUtils.calculateVersion(currentVersion)
 
         then:
-        lastUpdate == now
+        actualVersion == now
 
         where:
         currentVersion | now

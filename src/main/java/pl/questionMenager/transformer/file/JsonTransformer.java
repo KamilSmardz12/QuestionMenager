@@ -91,10 +91,11 @@ public class JsonTransformer implements Transformer {
             for (int i = 0; i < jsonArray.size(); i++) {
                 mapQuestions.put(jsonArray.getJsonObject(i).getInt(ID),
                         new Question(
-                                DifficultyLevel.valueOf(
-                                        jsonArray.getJsonObject(i).getString(DIFFICULTY_LEVEL)),
                                 jsonArray.getJsonObject(i).getString(QUESTION),
-                                jsonArray.getJsonObject(i).getString(ANSWER))
+                                jsonArray.getJsonObject(i).getString(ANSWER),
+                                DifficultyLevel.valueOf(
+                                        jsonArray.getJsonObject(i).getString(DIFFICULTY_LEVEL))
+                        )
                 );
             }
 
