@@ -33,7 +33,7 @@ public class JsonCrud implements Crud {
 
     @Override
     public void create(DifficultyLevel difficultyLevel, String question, String answer) {
-        questions.put(generateNextId(), new Question(difficultyLevel, question, answer));
+        questions.put(generateNextId(), new Question(question, answer, difficultyLevel));
     }
 
     @Override
@@ -67,9 +67,10 @@ public class JsonCrud implements Crud {
             if (entry.getKey().equals(number)) {
                 Question q = entry.getValue();
                 question = new Question(
-                        q.getDifficultyLevel(),
                         q.getQuestion(),
-                        q.getAnswer());
+                        q.getAnswer(),
+                        q.getDifficultyLevel()
+                );
             }
         }
 

@@ -31,12 +31,12 @@ public class JsonTransformer implements Transformer {
     private final String filePath;
     private String version;
 
-    JsonTransformer(String filePath) {
+    public JsonTransformer(String filePath) {
         this.filePath = filePath;
         validateFile(filePath);
     }
 
-    JsonTransformer() {
+    public  JsonTransformer() {
         this.filePath = DEFAULT_FILE_PATH;
         validateFile(filePath);
     }
@@ -64,7 +64,7 @@ public class JsonTransformer implements Transformer {
                 .add(QUESTIONS, questionsArrayJson)
                 .build();
 
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(DEFAULT_FILE_PATH))) {
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath))) {
             bufferedWriter.write(rootJson.toString());
         } catch (IOException e) {
             e.printStackTrace();
@@ -105,7 +105,8 @@ public class JsonTransformer implements Transformer {
         } finally {
             if (scanner != null) {
                 scanner.close();
-            } else if (jsonReader != null) {
+            }
+            if (jsonReader != null) {
                 jsonReader.close();
             }
         }
