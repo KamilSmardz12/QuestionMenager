@@ -43,27 +43,29 @@ public class JsonTransformer implements Transformer {
 
     @Override
     public void save(List<Question> questions) {
-        JsonBuilderFactory jsonBuilderFactory = Json.createBuilderFactory(Collections.emptyMap());
-        List<JsonObject> jsonObjectsList = new ArrayList<>();
+        JsonObjectBuilder rootJsonBuilder = Json.createObjectBuilder();
+        JsonArrayBuilder questionsArrayBuilder = Json.createArrayBuilder();
 
-        for (int i = 0; i < questions.size(); i++) {
-            jsonObjectsList.add(i, jsonBuilderFactory.createObjectBuilder()
-                    .add(QUESTION, questions.get(i).getQuestion())
-                    .add(ANSWER, questions.get(i).getAnswer())
-                    .build()
-            );
-        }
+        questions.forEach((question) -> {
+            JsonObjectBuilder questionJsonBuilder = Json.createObjectBuilder();
+            JsonObject questionJson = questionJsonBuilder
+                    .add(QUESTION, question.getQuestion())
+                    .add(ANSWER, question.getAnswer())
+                    .build();
 
-        JsonArray jsonArray = jsonBuilderFactory.createArrayBuilder(jsonObjectsList).build();
+            questionsArrayBuilder.add(questionJson);
+        });
 
-        JsonObject json = jsonBuilderFactory.createObjectBuilder()
+        JsonArray questionsArrayJson = questionsArrayBuilder.build();
+
+        JsonObject rootJson = rootJsonBuilder
                 .add(VERSION, calculateVersion(version))
                 .add(LAST_UPDATE, setPresentDateAndTime(CLOCK, DATE_TIME_FORMATTER))
-                .add(QUESTIONS, jsonArray)
+                .add(QUESTIONS, questionsArrayJson)
                 .build();
 
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath))) {
-            bufferedWriter.write(json.toString());
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(DEFAULT_FILE_PATH))) {
+            bufferedWriter.write(rootJson.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -76,7 +78,7 @@ public class JsonTransformer implements Transformer {
         JsonReader jsonReader = null;
         Map<Integer, Question> mapQuestions = new LinkedHashMap<>();
 
-        //zmienić na try with resources wszędzie gdzie są strumienie!
+        //zmienić na try with resources wszędzie gdzie są strumienie
         try {
             scanner = new Scanner(new File(filePath));
             String json = scanner.nextLine();
@@ -84,7 +86,6 @@ public class JsonTransformer implements Transformer {
             JsonReaderFactory jsonReaderFactory = Json.createReaderFactory(Collections.emptyMap());
             jsonReader = jsonReaderFactory.createReader(inputStream, UTF_8);
             JsonObject jsonObject = jsonReader.readObject();
-
             version = jsonObject.getString(VERSION);
             JsonArray jsonArray = jsonObject.getJsonArray(QUESTIONS);
 
@@ -102,8 +103,11 @@ public class JsonTransformer implements Transformer {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            scanner.close();
-            jsonReader.close();
+            if (scanner != null) {
+                scanner.close();
+            } else if (jsonReader != null) {
+                jsonReader.close();
+            }
         }
 
         TransformerUtils.isEmptyMap(mapQuestions);

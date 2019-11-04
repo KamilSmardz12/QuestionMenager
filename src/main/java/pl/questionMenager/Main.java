@@ -1,18 +1,19 @@
 package pl.questionMenager;
 
-import pl.questionMenager.controller.Controller;
-import pl.questionMenager.crud.Crud;
-import pl.questionMenager.model.DataType;
+import pl.questionMenager.transformer.file.JsonTransformer;
+import pl.questionMenager.transformer.Transformer;
 import pl.questionMenager.model.Question;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Main {
-
     public static void main(String[] args) {
-
-        Crud controller = Controller.create(DataType.JSON);
-        controller.updateAnswer(1, "Moja nowa odp");
-        Question q = controller.readRandomQuestion();
-        System.out.println(q);
-
+        Map<Integer, Question> questions = new HashMap<>();
+        Transformer transformObjectToJson = new JsonTransformer();
+        questions = transformObjectToJson.read();
+//        questions.put(1, new Question(1, "q", "a"));
+//        transformObjectToJson.save(questions);
+        System.out.println(questions);
     }
 }
