@@ -1,5 +1,6 @@
 package pl.questionMenager.transformer.file;
 
+import lombok.Cleanup;
 import pl.questionMenager.TimeTravelClock;
 import pl.questionMenager.model.DifficultyLevel;
 import pl.questionMenager.transformer.Transformer;
@@ -51,6 +52,7 @@ public class JsonTransformer implements Transformer {
             JsonObject questionJson = questionJsonBuilder
                     .add(QUESTION, question.getQuestion())
                     .add(ANSWER, question.getAnswer())
+                    .add(DIFFICULTY_LEVEL, question.getDifficultyLevel().toString())
                     .build();
 
             questionsArrayBuilder.add(questionJson);
@@ -74,8 +76,8 @@ public class JsonTransformer implements Transformer {
     @Override
     public Map<Integer, Question> read() {
 
-        Scanner scanner = null;
-        JsonReader jsonReader = null;
+        @Cleanup Scanner scanner = null;
+        @Cleanup JsonReader jsonReader = null;
         Map<Integer, Question> mapQuestions = new LinkedHashMap<>();
 
         //zmienić na try with resources wszędzie gdzie są strumienie
@@ -90,7 +92,7 @@ public class JsonTransformer implements Transformer {
             JsonArray jsonArray = jsonObject.getJsonArray(QUESTIONS);
 
             for (int i = 0; i < jsonArray.size(); i++) {
-                mapQuestions.put(jsonArray.getJsonObject(i).getInt(ID),
+                mapQuestions.put(i,
                         new Question(
                                 jsonArray.getJsonObject(i).getString(QUESTION),
                                 jsonArray.getJsonObject(i).getString(ANSWER),
@@ -102,13 +104,6 @@ public class JsonTransformer implements Transformer {
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (scanner != null) {
-                scanner.close();
-            }
-            if (jsonReader != null) {
-                jsonReader.close();
-            }
         }
 
         TransformerUtils.isEmptyMap(mapQuestions);

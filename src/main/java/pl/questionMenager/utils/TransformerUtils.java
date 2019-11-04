@@ -1,6 +1,8 @@
 package pl.questionMenager.utils;
 
 import lombok.NonNull;
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import pl.questionMenager.model.Question;
 
 import java.nio.file.Files;
@@ -10,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
+@Log
 public class TransformerUtils {
     private TransformerUtils() {
     }
@@ -24,7 +27,7 @@ public class TransformerUtils {
     public static String setPresentDateAndTime(Clock clock, String dateTimeFormatter) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateTimeFormatter);
         String dateAndTime = formatter.format(LocalDateTime.now(clock));
-        System.out.printf("Save date and time: %s%n", dateAndTime);
+        log.info("Save date and time: " + dateAndTime);
 
         return dateAndTime;
     }
@@ -55,8 +58,9 @@ public class TransformerUtils {
             middleValue = 0;
             firstValue++;
         }
+
         String version = String.format("%d.%d.%d", firstValue, middleValue, lastValue);
-        System.out.printf("Update version%s%n", version);
+        log.info("Update version: " + version);
 
         return version;
     }
