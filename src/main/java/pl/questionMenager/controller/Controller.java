@@ -4,14 +4,18 @@ import pl.questionMenager.crud.Crud;
 import pl.questionMenager.crud.database.DataBaseCrud;
 import pl.questionMenager.crud.file.JsonCrud;
 import pl.questionMenager.model.DataType;
+import pl.questionMenager.transformer.ConnetionFactory;
 import pl.questionMenager.transformer.TransformerFactory;
 import pl.questionMenager.transformer.database.DataBaseTransformerFactory;
 import pl.questionMenager.transformer.file.JsonTransformerFactory;
 import pl.questionMenager.view.CrudView;
 
+import static pl.questionMenager.utils.TransformerUtils.*;
+
 public class Controller {
 
     private static TransformerFactory transformerFactory;
+    private static ConnetionFactory connetionFactory;
     private static Crud crud;
     private static CrudView view;
 
@@ -20,16 +24,20 @@ public class Controller {
         return crud;
     }
 
-    public static void save(){
-        transformerFactory.save(crud.readAll());
+    public static void closeWorking(DataType dataType) {
+        if (isJsonData(dataType)) {
+            transformerFactory.save(crud.readAll());
+        } else {
+            connetionFactory.connect().close();
+        }
     }
 
     private static void checkDataType(DataType dataType) {
-        if (dataType == DataType.JSON) {
+        if (isJsonData(dataType)) {
             transformerFactory = new JsonTransformerFactory();
             crud = new JsonCrud(transformerFactory.read());
-        } else if (dataType == DataType.DATABASE) {
-            transformerFactory = new DataBaseTransformerFactory();
+        } else {
+            connetionFactory = new DataBaseTransformerFactory();
             crud = new DataBaseCrud();
         }
     }

@@ -6,7 +6,6 @@ import pl.questionMenager.model.Question;
 import java.util.List;
 
 public interface Crud {
-    void create(String question);
 
     void create(String question, String answer);
 

@@ -3,7 +3,6 @@ package pl.questionMenager.transformer.file;
 import lombok.Cleanup;
 import pl.questionMenager.TimeTravelClock;
 import pl.questionMenager.model.DifficultyLevel;
-import pl.questionMenager.transformer.Transformer;
 import pl.questionMenager.model.Question;
 import pl.questionMenager.utils.TransformerUtils;
 
@@ -16,7 +15,7 @@ import java.util.*;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static pl.questionMenager.utils.TransformerUtils.*;
 
-public class JsonTransformer implements Transformer {
+public class JsonTransformer {
 
     private static final String VERSION = "version";
     private static final String LAST_UPDATE = "lastUpdate";
@@ -32,17 +31,16 @@ public class JsonTransformer implements Transformer {
     private final String filePath;
     private String version;
 
-    public JsonTransformer(String filePath) {
+    JsonTransformer(String filePath) {
         this.filePath = filePath;
         validateFile(filePath);
     }
 
-    public  JsonTransformer() {
+   public JsonTransformer() {
         this.filePath = DEFAULT_FILE_PATH;
         validateFile(filePath);
     }
 
-    @Override
     public void save(List<Question> questions) {
         JsonObjectBuilder rootJsonBuilder = Json.createObjectBuilder();
         JsonArrayBuilder questionsArrayBuilder = Json.createArrayBuilder();
@@ -73,11 +71,12 @@ public class JsonTransformer implements Transformer {
         }
     }
 
-    @Override
     public Map<Integer, Question> read() {
 
-        @Cleanup Scanner scanner = null;
-        @Cleanup JsonReader jsonReader = null;
+        @Cleanup
+        Scanner scanner = null;
+        @Cleanup
+        JsonReader jsonReader = null;
         Map<Integer, Question> mapQuestions = new LinkedHashMap<>();
 
         //zmienić na try with resources wszędzie gdzie są strumienie

@@ -1,21 +1,41 @@
 package pl.questionMenager.crud.database;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import pl.questionMenager.crud.Crud;
 import pl.questionMenager.model.DifficultyLevel;
 import pl.questionMenager.model.Question;
+import pl.questionMenager.transformer.database.DataBaseTransformerFactory;
 
 import java.util.List;
 
 public class DataBaseCrud implements Crud {
 
-    @Override
-    public void create(String question) {
+    private SessionFactory sessionFactory;
 
+    public DataBaseCrud() {
+        sessionFactory = new DataBaseTransformerFactory().connect();
     }
 
     @Override
     public void create(String question, String answer) {
+        Session session = createSession();
+        session.beginTransaction();
 
+        try {
+            session.save(
+                    new Question(
+                            question,
+                            answer)
+            );
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            e.getMessage();
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
     }
 
     @Override
@@ -30,7 +50,19 @@ public class DataBaseCrud implements Crud {
 
     @Override
     public List<Question> readAll() {
-        return null;
+        Session sesion = createSession();
+        sesion.beginTransaction();
+        List<Question> questions = null;
+        try {
+            questions = sesion.createQuery("from Question").getResultList();
+            sesion.getTransaction().commit();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            sesion.getTransaction().rollback();
+        } finally {
+            sesion.close();
+        }
+        return questions;
     }
 
     @Override
@@ -76,5 +108,9 @@ public class DataBaseCrud implements Crud {
     @Override
     public void updateAnswerAndQuestion(int id, String answer, String question) {
 
+    }
+
+    private Session createSession() {
+        return sessionFactory.getCurrentSession();
     }
 }

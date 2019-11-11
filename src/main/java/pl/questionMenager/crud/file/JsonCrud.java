@@ -17,11 +17,6 @@ public class JsonCrud implements Crud {
     }
 
     @Override
-    public void create(String question) {
-        create(DifficultyLevel.EMPTY, question, null);
-    }
-
-    @Override
     public void create(String question, String answer) {
         create(DifficultyLevel.EMPTY, question, answer);
     }
@@ -69,7 +64,7 @@ public class JsonCrud implements Crud {
                 question = new Question(
                         q.getQuestion(),
                         q.getAnswer(),
-                        q.getDifficultyLevel()
+                        DifficultyLevel.valueOf(q.getDifficultyLevel())
                 );
             }
         }
@@ -97,7 +92,7 @@ public class JsonCrud implements Crud {
                 .filter(q -> q.getKey().equals(id))
                 .forEach(q -> {
                     Question question = q.getValue();
-                    question.setDifficultyLevel(difficultyLevel);
+                    question.setDifficultyLevel(difficultyLevel.toString());
                     question.setAnswer(answer);
                 });
     }
@@ -108,7 +103,7 @@ public class JsonCrud implements Crud {
                 .filter(q -> q.getKey().equals(id))
                 .forEach(v -> {
                     Question value = v.getValue();
-                    value.setDifficultyLevel(difficultyLevel);
+                    value.setDifficultyLevel(difficultyLevel.toString());
                     value.setQuestion(question);
                 });
     }

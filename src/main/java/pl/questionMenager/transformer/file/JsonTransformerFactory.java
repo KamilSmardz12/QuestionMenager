@@ -1,6 +1,5 @@
 package pl.questionMenager.transformer.file;
 
-import pl.questionMenager.transformer.Transformer;
 import pl.questionMenager.transformer.TransformerFactory;
 import pl.questionMenager.model.Question;
 
@@ -9,7 +8,7 @@ import java.util.Map;
 
 public class JsonTransformerFactory implements TransformerFactory {
 
-    private final Transformer jsonTransformer;
+    private final JsonTransformer jsonTransformer;
 
     public JsonTransformerFactory(String filePath) {
         jsonTransformer = new JsonTransformer(filePath);
