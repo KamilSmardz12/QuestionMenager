@@ -1,8 +1,8 @@
-package pl.questionMenager
+package pl.questionMenager.TransformerUtils
 
+import pl.questionMenager.TimeTravelClock
 import pl.questionMenager.utils.TransformerUtils
 import spock.lang.Specification
-import spock.lang.Unroll
 
 import java.time.Clock
 import java.time.LocalDate
@@ -26,29 +26,5 @@ class TransformerUtilsTest extends Specification {
 
         then:
         lastUpdate == "01-11-19 23:09"
-    }
-
-    @Unroll
-    def "actual version: #currentVersion - new version: #now"() {
-        given:
-        String actualVersion
-
-        when:
-        actualVersion = TransformerUtils.calculateVersion(currentVersion)
-
-        then:
-        actualVersion == now
-
-        where:
-        currentVersion | now
-        "0.0.1"        | "0.0.2"
-        "0.1.9"        | "0.2.0"
-        "0.1.1"        | "0.1.2"
-        "1.1.1"        | "1.1.2"
-        "1.1.9"        | "1.2.0"
-        "0.9.9"        | "1.0.0"
-        "1.0.1"        | "1.0.2"
-        "1.8.9"        | "1.9.0"
-        "1.9.9"        | "2.0.0"
     }
 }

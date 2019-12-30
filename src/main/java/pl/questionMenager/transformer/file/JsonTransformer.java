@@ -11,6 +11,7 @@ import java.io.*;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.IntStream;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static pl.questionMenager.utils.TransformerUtils.*;
@@ -32,13 +33,13 @@ public class JsonTransformer {
     private String version;
 
     JsonTransformer(String filePath) {
-        this.filePath = filePath;
         validateFile(filePath);
+        this.filePath = filePath;
     }
 
-   public JsonTransformer() {
+    public JsonTransformer() {
+        validateFile(DEFAULT_FILE_PATH);
         this.filePath = DEFAULT_FILE_PATH;
-        validateFile(filePath);
     }
 
     public void save(List<Question> questions) {
@@ -90,16 +91,16 @@ public class JsonTransformer {
             version = jsonObject.getString(VERSION);
             JsonArray jsonArray = jsonObject.getJsonArray(QUESTIONS);
 
-            for (int i = 0; i < jsonArray.size(); i++) {
+
+            IntStream.range(0, jsonArray.size()).forEach(i -> {
                 mapQuestions.put(i,
                         new Question(
                                 jsonArray.getJsonObject(i).getString(QUESTION),
                                 jsonArray.getJsonObject(i).getString(ANSWER),
-                                DifficultyLevel.valueOf(
-                                        jsonArray.getJsonObject(i).getString(DIFFICULTY_LEVEL))
+                                DifficultyLevel.valueOf(jsonArray.getJsonObject(i).getString(DIFFICULTY_LEVEL))
                         )
                 );
-            }
+            });
 
         } catch (Exception e) {
             e.printStackTrace();

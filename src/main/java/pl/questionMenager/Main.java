@@ -16,8 +16,22 @@ public class Main {
 //        questions.add(new Question("qqq", "aaaa"));
 //        transformObjectToJson.save(questions);
 
-        DataBaseCrud dataBaseCrud = new DataBaseCrud();
-        dataBaseCrud.create("g11", "a11");
-        dataBaseCrud.readAll().forEach(System.out::println);
+//        DataBaseCrud dataBaseCrud = new DataBaseCrud();
+//        dataBaseCrud.create("g11", "a11");
+//        dataBaseCrud.readAll().forEach(System.out::println);
+        init().forEach(System.out::println);
+    }
+
+    public static List<String> init() {
+        List<String> data = new LinkedList<>();
+        for (int i = 0; i <= 11; i++) {
+            for (int j = 0; j <= 9; j++) {
+                for (int k = 0; k <= 9; k++) {
+                    data.add(String.format("%d.%d.%d", i, j, k));
+                }
+            }
+        }
+        data.add("12.0.0");
+        return data;
     }
 }

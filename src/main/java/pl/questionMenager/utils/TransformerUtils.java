@@ -44,13 +44,14 @@ public class TransformerUtils {
      * @param actualVersion version from file
      * @return {@link String} in '\d.\d.\d' format
      */
-    //TODO źle działa
     public static String calculateVersion(@NonNull String actualVersion) {
         String[] splittedActualVersion = actualVersion.split("\\.");
 
         int lastValue = Integer.parseInt(splittedActualVersion[2]);
         int middleValue = Integer.parseInt(splittedActualVersion[1]);
         int firstValue = Integer.parseInt(splittedActualVersion[0]);
+
+        String versionBeforeUpdate = String.format("%d.%d.%d", firstValue, middleValue, lastValue);
 
         if (lastValue == 9) {
             middleValue++;
@@ -64,10 +65,10 @@ public class TransformerUtils {
             firstValue++;
         }
 
-        String version = String.format("%d.%d.%d", firstValue, middleValue, lastValue);
-        log.info("Update version: " + version);
+        String updatedVersion = String.format("%d.%d.%d", firstValue, middleValue, lastValue);
+        log.info(String.format("%s%s%s%s", "Update version: ", versionBeforeUpdate, "-->", updatedVersion));
 
-        return version;
+        return updatedVersion;
     }
 
     /**
@@ -96,7 +97,7 @@ public class TransformerUtils {
         return Files.exists(Paths.get(filePath));
     }
 
-    public static boolean isJsonData(DataType dataType){
+    public static boolean isJsonData(DataType dataType) {
         return dataType.equals(DataType.JSON);
     }
 
