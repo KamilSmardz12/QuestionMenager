@@ -24,9 +24,7 @@ public class DataBaseCrud implements Crud {
         session.beginTransaction();
 
         try {
-            session.save(new Question(
-                    question,
-                    answer));
+            session.save(new Question(question, answer));
             session.getTransaction().commit();
         } catch (Exception e) {
             e.getMessage();
@@ -54,7 +52,7 @@ public class DataBaseCrud implements Crud {
         try {
             questions = session.createQuery("from Question").getResultList();
             session.getTransaction().commit();
-        } catch (HibernateException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
         } finally {

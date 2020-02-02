@@ -48,13 +48,12 @@ public class JsonTransformer {
 
         questions.forEach((question) -> {
             JsonObjectBuilder questionJsonBuilder = Json.createObjectBuilder();
-            JsonObject questionJson = questionJsonBuilder
-                    .add(QUESTION, question.getQuestion())
-                    .add(ANSWER, question.getAnswer())
-                    .add(DIFFICULTY_LEVEL, question.getDifficultyLevel().toString())
-                    .build();
-
-            questionsArrayBuilder.add(questionJson);
+            questionsArrayBuilder.add(
+                    questionJsonBuilder
+                            .add(QUESTION, question.getQuestion())
+                            .add(ANSWER, question.getAnswer())
+                            .add(DIFFICULTY_LEVEL, question.getDifficultyLevel())
+                            .build());
         });
 
         JsonArray questionsArrayJson = questionsArrayBuilder.build();
@@ -64,7 +63,7 @@ public class JsonTransformer {
                 .add(LAST_UPDATE, setPresentDateAndTime(CLOCK, DATE_TIME_FORMATTER))
                 .add(QUESTIONS, questionsArrayJson)
                 .build();
-
+//Tu jest źle! Robi nowy plik!
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath))) {
             bufferedWriter.write(rootJson.toString());
         } catch (IOException e) {
@@ -78,22 +77,23 @@ public class JsonTransformer {
         Scanner scanner = null;
         @Cleanup
         JsonReader jsonReader = null;
-        Map<Integer, Question> mapQuestions = new LinkedHashMap<>();
+        Map<Integer, Question> questions = new LinkedHashMap<>();
 
         //zmienić na try with resources wszędzie gdzie są strumienie
         try {
             scanner = new Scanner(new File(filePath));
-            String json = scanner.nextLine();
-            InputStream inputStream = new ByteArrayInputStream(json.getBytes());
+            InputStream inputStream = new ByteArrayInputStream(
+                    scanner.nextLine()
+                            .getBytes()
+            );
             JsonReaderFactory jsonReaderFactory = Json.createReaderFactory(Collections.emptyMap());
             jsonReader = jsonReaderFactory.createReader(inputStream, UTF_8);
             JsonObject jsonObject = jsonReader.readObject();
             version = jsonObject.getString(VERSION);
             JsonArray jsonArray = jsonObject.getJsonArray(QUESTIONS);
 
-
             IntStream.range(0, jsonArray.size()).forEach(i -> {
-                mapQuestions.put(i,
+                questions.put(i,
                         new Question(
                                 jsonArray.getJsonObject(i).getString(QUESTION),
                                 jsonArray.getJsonObject(i).getString(ANSWER),
@@ -106,9 +106,9 @@ public class JsonTransformer {
             e.printStackTrace();
         }
 
-        TransformerUtils.isEmptyMap(mapQuestions);
+        TransformerUtils.isEmptyMap(questions);
 
-        return mapQuestions;
+        return questions;
     }
 
 }

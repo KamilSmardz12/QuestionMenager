@@ -9,12 +9,10 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-/**
- * Class to mock time
- */
 @EqualsAndHashCode(callSuper = true)
 @Value
 public class TimeTravelClock extends Clock {
+    private static final String ZONE_ID = "Europe/Paris";
 
     private final LocalDateTime localDateTime;
 
@@ -30,6 +28,6 @@ public class TimeTravelClock extends Clock {
 
     @Override
     public Instant instant() {
-        return localDateTime.atZone(ZoneId.of("Europe/Paris")).toInstant();
+        return localDateTime.atZone(ZoneId.of(ZONE_ID)).toInstant();
     }
 }
