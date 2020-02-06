@@ -63,7 +63,7 @@ public class JsonTransformer {
                 .add(LAST_UPDATE, setPresentDateAndTime(CLOCK, DATE_TIME_FORMATTER))
                 .add(QUESTIONS, questionsArrayJson)
                 .build();
-//Tu jest źle! Robi nowy plik!
+
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath))) {
             bufferedWriter.write(rootJson.toString());
         } catch (IOException e) {

@@ -1,15 +1,20 @@
-0 - Stworzenie readme                                   |
-1 - Tworzenie .json według naszego schematu             |
-    Stworzenie deserializera (nasz obiekt do json'a)    |
-2 - Czytanie pytan                                      |
-3 - Tworzenie dodatkowego pytania                       |
-4 - Update pytania                                      |
-5 - Usuwanie pytania                                    |
-6 - Nadpisywanie wersji i daty (w danych formatach)     |
-    Zrobienie wersji konsolowej?                        |
-7 - Stworzenie wersji okienkowej (JavaFX)               |
-8 - Dodanie bazy danych (hibernate)                     |
-9 - CRUD bazy danych                                    |
+Task                                                                    | Kolejność, w jakiej potrzebujemy?| Zajęte/Wolne
+-----------------------------------------------------------------------------------                        |
+0 - Stworzenie readme                                                   |                                  |
+1 - Zrobienie wersji konsolowej. Interfejs użytkownika                  | 2                                |
+2 - TESTY!                                                              | 0                                |
+3 - Logger - stworzenie dziennika działan, ogólnego dla całej aplikacji | 1                                |
+4 - Synchronizacja bazy i jsona (zrobiłbym wątki)                       | 3                                |
+5 - Przerobienie struktury na osobne projekty                           | 1                                |
+6 - Gmail - łączenie z naszą pocztą i wysyłanie emaili do użytkownika   | 4                                |
+7 - Można dodać jsp (jak nie to zrobi sie plik bat i będzie konsola)    | 5                                |
+8 - CRUD do bazy (Hb.)                                                  | 1                                |
+9 - Stworzenie mapowania na tabele w Hibernate (2 tabele?)              | 2                                |
+10 - Przygotowanie pliku do automatycznego tworzenia danych potrzebnych
+     do utworzenia bazy danych na nowym komputerze zgodnymi z danymi
+     podanymi w projekcie                                               | 3                                |
+11 - MVC                                                                | 2                                |
+13 - Stworzenie dwóch poziomów dostępu (admin, użytkownik) itp.         | 3                                |
+14 - Wesług uznania dopisać                                             |
 
 
-Pakiety co zrobiłem to tylko propozycja możesz je zmieniac na luzie

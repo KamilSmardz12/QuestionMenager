@@ -39,7 +39,7 @@ public class JsonCrud implements Crud {
     @Override
     public List<Question> read(DifficultyLevel difficultyLevel) {
         return questions.values().stream()
-                .filter(q -> q.getDifficultyLevel().equals(difficultyLevel))
+                .filter(q -> q.getDifficultyLevel().equals(difficultyLevel.toString()))
                 .collect(Collectors.toList());
     }
 

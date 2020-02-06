@@ -71,22 +71,12 @@ public class TransformerUtils {
         return updatedVersion;
     }
 
-    /**
-     * Check if file is exist
-     *
-     * @param filePath path to file
-     */
     public static void validateFile(@NonNull String filePath) {
         if (!isFileExist(filePath)) {
             throw new IllegalStateException("You have entered the wrong path to the file!");
         }
     }
 
-    /**
-     * Check if there are questions in the file
-     *
-     * @param questions questions from data
-     */
     public static void isEmptyMap(Map<Integer, Question> questions) {
         if (questions.isEmpty()) {
             throw new IllegalStateException("There are no questions!");
