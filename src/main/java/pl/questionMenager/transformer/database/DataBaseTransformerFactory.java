@@ -12,6 +12,6 @@ public class DataBaseTransformerFactory implements ConnetionFactory {
 
     @Override
     public SessionFactory connect() {
-        return DataBaseConnector.createSessionFactory();
+        return DataBaseConnector.getSessionFactory();
     }
 }

@@ -15,7 +15,7 @@ public class Main {
         JsonTransformer transformObjectToJson = new JsonTransformer();
         System.out.println(transformObjectToJson.read());
         Crud crud = Controller.create(DataType.JSON);
-        crud.create("dassda", "asdasdasdsdadas");
+        crud.create("Rafal", "Rafal");
         Controller.closeWorking(DataType.JSON);
     }
 }
