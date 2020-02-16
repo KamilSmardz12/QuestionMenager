@@ -25,6 +25,6 @@ public class JsonTransformerFactory implements TransformerFactory {
 
     @Override
     public void save(List<Question> questions) {
-        jsonTransformer.save(questions);
+        jsonTransformer.fromListOfQuestionToJsonObject(questions);
     }
 }

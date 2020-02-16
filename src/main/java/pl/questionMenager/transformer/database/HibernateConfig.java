@@ -9,10 +9,10 @@ import pl.questionMenager.model.Question;
 
 import java.util.Properties;
 
-final class DataBaseConnector {
+final class HibernateConfig {
     private static SessionFactory sessionFactory;
 
-    private DataBaseConnector() {
+    private HibernateConfig() {
     }
 
     public static SessionFactory getSessionFactory() {
@@ -24,7 +24,7 @@ final class DataBaseConnector {
                 //wlasciwosci
                 Properties properties = new Properties();
                 properties.put(Environment.DRIVER, "com.mysql.jdbc.Driver");
-                properties.put(Environment.URL, "");
+                properties.put(Environment.URL, "jdbc:h2:database/test");
                 properties.put(Environment.USER, "");
                 properties.put(Environment.PASS, "");
                 properties.put(Environment.SHOW_SQL, "true");

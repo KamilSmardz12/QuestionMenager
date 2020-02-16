@@ -3,12 +3,15 @@ package pl.questionMenager.crud.database;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import pl.questionMenager.crud.Crud;
 import pl.questionMenager.model.DifficultyLevel;
 import pl.questionMenager.model.Question;
 import pl.questionMenager.transformer.database.DataBaseTransformerFactory;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class DataBaseCrud implements Crud {
 
@@ -21,29 +24,61 @@ public class DataBaseCrud implements Crud {
     @Override
     public void create(String question, String answer) {
         Session session = createSession();
-        session.beginTransaction();
+        Transaction transaction = session.beginTransaction();
 
         try {
             session.save(new Question(question, answer));
-            session.getTransaction().commit();
+            transaction.commit();
         } catch (Exception e) {
             e.getMessage();
-            session.getTransaction().rollback();
+            if (transaction != null) {
+                transaction.rollback();
+            }
+        } finally {
+            session.close();
+        }
+    }
+
+    /*
+    TODO modyfikator dostepu? Zeby zwyklu user nie wrzucil prostego pytania
+    TODO i dal, ze jest to mega trudne pytanie (DifficultyLevel.HARD)
+     */
+    @Override
+    public void create(DifficultyLevel difficultyLevel, String question) {
+        Session session = createSession();
+        Transaction transaction = session.beginTransaction();
+
+        try {
+            session.save(new Question(question, null, difficultyLevel));
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
         } finally {
             session.close();
         }
     }
 
     @Override
-    public void create(DifficultyLevel difficultyLevel, String question) {
-
-    }
-
-    @Override
     public void create(DifficultyLevel difficultyLevel, String question, String answer) {
-
+        Session session = createSession();
+        Transaction transaction = session.beginTransaction();
+        try {
+            session.save(new Question(question, answer, difficultyLevel));
+            transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (transaction != null) {
+                transaction.rollback();
+            }
+        } finally {
+            session.close();
+        }
     }
 
+    //TODO sprawdzic.
     @Override
     public List<Question> readAll() {
         Session session = createSession();
@@ -63,12 +98,48 @@ public class DataBaseCrud implements Crud {
 
     @Override
     public List<Question> read(DifficultyLevel difficultyLevel) {
-        return null;
+        Session session = createSession();
+        Transaction transaction = session.beginTransaction();
+        List<Question> questionList = null;
+        List<Question> collect = null;
+        try {
+            questionList = readAll();
+            collect = questionList.stream()
+                    .filter(e -> e.getDifficultyLevel().equals(difficultyLevel))
+                    .collect(Collectors.toList());
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return collect;
     }
 
     @Override
     public Question read(int id) {
-        return null;
+        Session session = createSession();
+        Transaction transaction = session.beginTransaction();
+        Question question = null;
+        try {
+            List<Question> questionList = readAll();
+            Optional<Question> first = questionList.stream()
+                    .filter(q -> q.getIdQuestion().equals(id))
+                    .findFirst();
+            question = first.get();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return question;
     }
 
     @Override
@@ -76,9 +147,20 @@ public class DataBaseCrud implements Crud {
         return null;
     }
 
+    //TODO dokonczyc
     @Override
     public void remove(int id) {
+        Session session = createSession();
+        Transaction transaction = session.beginTransaction();
+        try{
 
+            //session.delete();
+            transaction.commit();
+        }catch (Exception e){
+            if (transaction!= null){
+                transaction.rollback();
+            }
+        }
     }
 
     @Override

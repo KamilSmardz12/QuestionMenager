@@ -32,7 +32,7 @@ public class JsonTransformer {
     private final String filePath;
     private String version;
 
-    JsonTransformer(String filePath) {
+    public JsonTransformer(String filePath) {
         validateFile(filePath);
         this.filePath = filePath;
     }
@@ -42,7 +42,7 @@ public class JsonTransformer {
         this.filePath = DEFAULT_FILE_PATH;
     }
 
-    public void save(List<Question> questions) {
+    public JsonObject fromListOfQuestionToJsonObject(List<Question> questions) {
         JsonObjectBuilder rootJsonBuilder = Json.createObjectBuilder();
         JsonArrayBuilder questionsArrayBuilder = Json.createArrayBuilder();
 
@@ -58,12 +58,15 @@ public class JsonTransformer {
 
         JsonArray questionsArrayJson = questionsArrayBuilder.build();
 
-        JsonObject rootJson = rootJsonBuilder
+        //todo skad masz tu ta aktualna wersje ???
+        return rootJsonBuilder
                 .add(VERSION, calculateVersion(version))
                 .add(LAST_UPDATE, setPresentDateAndTime(CLOCK, DATE_TIME_FORMATTER))
                 .add(QUESTIONS, questionsArrayJson)
                 .build();
+    }
 
+    public void save(JsonObject rootJson){
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath))) {
             bufferedWriter.write(rootJson.toString());
         } catch (IOException e) {

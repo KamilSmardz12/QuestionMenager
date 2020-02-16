@@ -8,7 +8,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 //TODO ograć puste pola (tam gdzie null)
+//TODO pisze Rafal: co masz na mysli ogarnac puste pola????
 public class JsonCrud implements Crud {
+
 
     private Map<Integer, Question> questions;
 
@@ -25,6 +27,7 @@ public class JsonCrud implements Crud {
     public void create(DifficultyLevel difficultyLevel, String question) {
         create(difficultyLevel, question, null);
     }
+
 
     @Override
     public void create(DifficultyLevel difficultyLevel, String question, String answer) {

@@ -16,6 +16,8 @@ public class Main {
         System.out.println(transformObjectToJson.read());
         Crud crud = Controller.create(DataType.JSON);
         crud.create("dassda", "asdasdasdsdadas");
+        crud.create("awji", "awldpalwd");
+        crud.create("ijseifjsefse", "ijsiejfisjf");
         Controller.closeWorking(DataType.JSON);
     }
 }

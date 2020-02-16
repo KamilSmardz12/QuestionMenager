@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Data
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @Entity
@@ -39,4 +39,5 @@ public class Question {
         this.answer = answer;
         this.difficultyLevel = difficultyLevel.toString();
     }
+
 }
