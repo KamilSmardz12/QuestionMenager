@@ -32,9 +32,7 @@ public class JsonCrud implements Crud {
     }
 
     @Override
-    public List<Question> readAll() {
-        return new LinkedList<>(questions.values());
-    }
+    public List<Question> readAll() { return new LinkedList<>(questions.values()); }
 
     @Override
     public List<Question> read(DifficultyLevel difficultyLevel) {
@@ -55,18 +53,10 @@ public class JsonCrud implements Crud {
     @Override
     public Question readRandomQuestion() {
         Question question = null;
-
         int number = drawingARandomeNumberFromTheMap();
-
         for (Map.Entry<Integer, Question> entry : questions.entrySet()) {
-            if (entry.getKey().equals(number)) {
-                Question q = entry.getValue();
-                question = new Question(
-                        q.getQuestion(),
-                        q.getAnswer(),
-                        DifficultyLevel.valueOf(q.getDifficultyLevel())
-                );
-            }
+            if (entry.getKey().equals(number))
+                question = entry.getValue();
         }
 
         return question;
