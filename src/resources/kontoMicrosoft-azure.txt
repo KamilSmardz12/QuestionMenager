@@ -1,0 +1,8 @@
+gmail:
+	login: questionMenager@gmail.com
+	password: !questionMenager!123456
+
+mocrosoft azure:
+	login: emial...
+	password !MenagerQuestion!123456
+
