@@ -12,10 +12,10 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         // Nie generuje się id i metoda save nadpisuje plik
-        JsonTransformer transformObjectToJson = new JsonTransformer();
-        System.out.println(transformObjectToJson.read());
-        Crud crud = Controller.create(DataType.JSON);
-        crud.create("Rafal", "Rafal");
+        //JsonTransformer transformObjectToJson = new JsonTransformer();
+        //System.out.println(transformObjectToJson.read());
+        Crud crud = Controller.create(DataType.DATABASE);
+        crud.create("Emilka", "Emilka");
         Controller.closeWorking(DataType.JSON);
     }
 }

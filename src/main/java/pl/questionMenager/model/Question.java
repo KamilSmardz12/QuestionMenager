@@ -5,18 +5,18 @@ import lombok.*;
 import javax.persistence.*;
 
 @Data
-//@AllArgsConstructor
+@AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @Entity
 @Table(name = "Questions")
 public class Question {
 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idQuestion")
     private Integer idQuestion;
 
-    @Id
     @NonNull
     @Column(name = "question")
     private String question;

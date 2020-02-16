@@ -24,9 +24,9 @@ final class HibernateConfig {
                 //wlasciwosci
                 Properties properties = new Properties();
                 properties.put(Environment.DRIVER, "com.mysql.jdbc.Driver");
-                properties.put(Environment.URL, "jdbc:h2:database/test");
-                properties.put(Environment.USER, "");
-                properties.put(Environment.PASS, "");
+                properties.put(Environment.URL, "jdbc:mysql://localhost:3306/QuestionMenager");
+                properties.put(Environment.USER, "user-name");
+                properties.put(Environment.PASS, "RootPassword!123456!");
                 properties.put(Environment.SHOW_SQL, "true");
                 properties.put(Environment.DIALECT, "org.hibernate.dialect.MySQL5Dialect");
                 properties.put(Environment.HBM2DDL_AUTO, "create");

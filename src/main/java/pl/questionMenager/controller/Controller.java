@@ -26,7 +26,7 @@ public class Controller {
 
     public static void closeWorking(DataType dataType) {
         if (isJsonData(dataType)) {
-            transformerFactory.save(crud.readAll());
+            //transformerFactory.save(crud.readAll());
         } else {
             connetionFactory.connect().close();
         }

@@ -13,17 +13,22 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
+//TODO dokonczyc metody i zmienic, żeby cała aplikacja działała w zakresie jednej sesji
 public class DataBaseCrud implements Crud {
 
     private SessionFactory sessionFactory;
+    private Session session;
 
     public DataBaseCrud() {
         sessionFactory = new DataBaseTransformerFactory().connect();
+        session = sessionFactory.openSession();
     }
 
     @Override
     public void create(String question, String answer) {
-        Session session = createSession();
+        DataBaseTransformerFactory dataBaseTransformerFactory = new DataBaseTransformerFactory();
+        Session session = dataBaseTransformerFactory.connect().openSession();
         Transaction transaction = session.beginTransaction();
 
         try {
@@ -45,7 +50,8 @@ public class DataBaseCrud implements Crud {
      */
     @Override
     public void create(DifficultyLevel difficultyLevel, String question) {
-        Session session = createSession();
+        DataBaseTransformerFactory dataBaseTransformerFactory = new DataBaseTransformerFactory();
+        Session session = dataBaseTransformerFactory.connect().openSession();
         Transaction transaction = session.beginTransaction();
 
         try {
@@ -63,7 +69,8 @@ public class DataBaseCrud implements Crud {
 
     @Override
     public void create(DifficultyLevel difficultyLevel, String question, String answer) {
-        Session session = createSession();
+        DataBaseTransformerFactory dataBaseTransformerFactory = new DataBaseTransformerFactory();
+        Session session = dataBaseTransformerFactory.connect().openSession();
         Transaction transaction = session.beginTransaction();
         try {
             session.save(new Question(question, answer, difficultyLevel));
@@ -81,7 +88,8 @@ public class DataBaseCrud implements Crud {
     //TODO sprawdzic.
     @Override
     public List<Question> readAll() {
-        Session session = createSession();
+        DataBaseTransformerFactory dataBaseTransformerFactory = new DataBaseTransformerFactory();
+        Session session = dataBaseTransformerFactory.connect().openSession();
         session.beginTransaction();
         List<Question> questions = null;
         try {
@@ -98,7 +106,8 @@ public class DataBaseCrud implements Crud {
 
     @Override
     public List<Question> read(DifficultyLevel difficultyLevel) {
-        Session session = createSession();
+        DataBaseTransformerFactory dataBaseTransformerFactory = new DataBaseTransformerFactory();
+        Session session = dataBaseTransformerFactory.connect().openSession();
         Transaction transaction = session.beginTransaction();
         List<Question> questionList = null;
         List<Question> collect = null;
@@ -121,7 +130,8 @@ public class DataBaseCrud implements Crud {
 
     @Override
     public Question read(int id) {
-        Session session = createSession();
+        DataBaseTransformerFactory dataBaseTransformerFactory = new DataBaseTransformerFactory();
+        Session session = dataBaseTransformerFactory.connect().openSession();
         Transaction transaction = session.beginTransaction();
         Question question = null;
         try {
@@ -150,7 +160,8 @@ public class DataBaseCrud implements Crud {
     //TODO dokonczyc
     @Override
     public void remove(int id) {
-        Session session = createSession();
+        DataBaseTransformerFactory dataBaseTransformerFactory = new DataBaseTransformerFactory();
+        Session session = dataBaseTransformerFactory.connect().openSession();
         Transaction transaction = session.beginTransaction();
         try{
 
