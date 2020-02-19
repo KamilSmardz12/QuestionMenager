@@ -14,4 +14,9 @@ public class DataBaseTransformerFactory implements ConnetionFactory {
     public SessionFactory connect() {
         return HibernateConfig.getSessionFactory();
     }
+
+    @Override
+    public SessionFactory connestTEST() {
+        return HibernateConfig.getSessionFactoryForTest();
+    }
 }

@@ -46,4 +46,35 @@ final class HibernateConfig {
         return sessionFactory;
     }
 
+    public static SessionFactory getSessionFactoryForTest(){
+        if (sessionFactory == null) {
+            try {
+                //konfiguracja
+                Configuration configuration = new Configuration();
+
+                //wlasciwosci
+                Properties properties = new Properties();
+                properties.put(Environment.DRIVER, "org.h2.Driver");
+                properties.put(Environment.URL, "jdbc:h2:mem:test");
+                properties.put(Environment.USER, "sa");
+                properties.put(Environment.PASS, "");
+                properties.put(Environment.SHOW_SQL, "true");
+                properties.put(Environment.DIALECT, "org.hibernate.dialect.H2Dialect");
+                properties.put(Environment.HBM2DDL_AUTO, "create-drop");
+
+                configuration.setProperties(properties);
+                //can chain method
+                configuration.addAnnotatedClass(Question.class);
+
+                ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                        .applySettings(configuration.getProperties())
+                        .build();
+                sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return sessionFactory;
+    }
+
 }

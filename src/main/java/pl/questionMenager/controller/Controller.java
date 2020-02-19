@@ -27,6 +27,8 @@ public class Controller {
     public static void closeWorking(DataType dataType) {
         if (isJsonData(dataType)) {
             //transformerFactory.save(crud.readAll());
+        } else if (isDataBaseTEST(dataType)) {
+            connetionFactory.connestTEST().close();
         } else {
             //TODO bez sensu, laczysz i od razu zamykasz getCurrentSession()?????
             connetionFactory.connect().close();
@@ -39,7 +41,7 @@ public class Controller {
             crud = new JsonCrud(transformerFactory.read());
         } else {
             connetionFactory = new DataBaseTransformerFactory();
-            crud = new DataBaseCrud();
+            crud = new DataBaseCrud(dataType);
         }
     }
 }

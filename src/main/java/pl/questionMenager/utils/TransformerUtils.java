@@ -86,4 +86,8 @@ public class TransformerUtils {
         return dataType.equals(DataType.JSON);
     }
 
+    public static boolean isDataBaseTEST(DataType dataType){
+        return dataType.equals(DataType.DATABASETEST);
+    }
+
 }

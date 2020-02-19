@@ -1,10 +1,12 @@
 package pl.questionMenager.crud.database;
 
+import com.sun.istack.NotNull;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import pl.questionMenager.crud.Crud;
+import pl.questionMenager.model.DataType;
 import pl.questionMenager.model.DifficultyLevel;
 import pl.questionMenager.model.Question;
 import pl.questionMenager.transformer.database.DataBaseTransformerFactory;
@@ -18,9 +20,14 @@ public class DataBaseCrud implements Crud {
 
     private SessionFactory sessionFactory;
     private Session session;
+    private DataType dataType;
 
-    public DataBaseCrud() {
-        sessionFactory = new DataBaseTransformerFactory().connect();
+    public DataBaseCrud(@NotNull DataType dataType) {
+        if (dataType.equals(DataType.DATABASETEST)) {
+            sessionFactory = new DataBaseTransformerFactory().connestTEST();
+        } else if(dataType.equals(DataType.DATABASE)) {
+            sessionFactory = new DataBaseTransformerFactory().connect();
+        }
         session = sessionFactory.openSession();
     }
 
