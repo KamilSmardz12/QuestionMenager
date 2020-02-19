@@ -23,7 +23,6 @@ public class JsonTransformer {
     private static final String QUESTION = "question";
     private static final String QUESTIONS = "questions";
     private static final String ANSWER = "answer";
-    private static final String ID = "id";
     private static final String DIFFICULTY_LEVEL = "difficultyLevel";
     private static final Clock CLOCK = new TimeTravelClock(LocalDateTime.now());
     private static final String DATE_TIME_FORMATTER = "dd-MM-yy HH:mm";
@@ -75,7 +74,6 @@ public class JsonTransformer {
     }
 
     public Map<Integer, Question> read() {
-
         @Cleanup
         Scanner scanner = null;
         @Cleanup

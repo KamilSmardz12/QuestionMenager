@@ -1,7 +1,6 @@
 package pl.questionMenager.crud.database;
 
 import com.sun.istack.NotNull;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -12,9 +11,7 @@ import pl.questionMenager.model.Question;
 import pl.questionMenager.transformer.database.DataBaseTransformerFactory;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-
 
 public class DataBaseCrud implements Crud {
 
@@ -72,10 +69,7 @@ public class DataBaseCrud implements Crud {
             session.save(new Question(question, answer, difficultyLevel));
             transaction.commit();
         } catch (Exception e) {
-            e.printStackTrace();
-            if (transaction != null) {
-                transaction.rollback();
-            }
+            transaction.rollback();
         }
     }
 
@@ -97,30 +91,23 @@ public class DataBaseCrud implements Crud {
     @Override
     public List<Question> read(DifficultyLevel difficultyLevel) {
         Transaction transaction = session.beginTransaction();
-        List<Question> questionList = null;
-        List<Question> collect = null;
+        List<Question> questions = null;
         try {
-            questionList = readAll();
-            collect = questionList.stream()
+            questions = readAll().stream()
                     .filter(e -> e.getDifficultyLevel().equals(difficultyLevel))
                     .collect(Collectors.toList());
             transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return collect;
+        return questions;
     }
 
     @Override
     public Question read(int id) {
         Transaction transaction = session.beginTransaction();
         Question question = null;
-        try {/*
-            List<Question> questionList = readAll();
-            Optional<Question> first = questionList.stream()
-                    .filter(q -> q.getIdQuestion().equals(id))
-                    .findFirst();
-            question = first.get();*/
+        try {
             question = session.get(Question.class, id);
             transaction.commit();
         } catch (Exception e) {
@@ -143,10 +130,8 @@ public class DataBaseCrud implements Crud {
             session.delete(questionToRemove);
             transaction.commit();
         } catch (Exception e) {
-            if (transaction != null) {
                 transaction.rollback();
-            }
-            e.printStackTrace();
+                        e.printStackTrace();
         }
     }
 
@@ -203,10 +188,10 @@ public class DataBaseCrud implements Crud {
     public void updateDifficultyLevelAndQuestion(int id, DifficultyLevel difficultyLevel, String question) {
         Transaction transaction = session.beginTransaction();
         try {
-            Question question1 = session.get(Question.class, id);
-            question1.setDifficultyLevel(difficultyLevel.toString());
-            question1.setQuestion(question);
-            session.update(question1);
+            Question questionToUpdate = session.get(Question.class, id);
+            questionToUpdate.setDifficultyLevel(difficultyLevel.toString());
+            questionToUpdate.setQuestion(question);
+            session.update(questionToUpdate);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -220,10 +205,10 @@ public class DataBaseCrud implements Crud {
     public void updateAnswerAndQuestion(int id, String answer, String question) {
         Transaction transaction = session.beginTransaction();
         try {
-            Question question1 = session.get(Question.class, id);
-            question1.setAnswer(answer);
-            question1.setQuestion(question);
-            session.update(question1);
+            Question questionToUpdate = session.get(Question.class, id);
+            questionToUpdate.setAnswer(answer);
+            questionToUpdate.setQuestion(question);
+            session.update(questionToUpdate);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
