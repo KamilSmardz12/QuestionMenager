@@ -28,6 +28,7 @@ public class Controller {
         if (isJsonData(dataType)) {
             //transformerFactory.save(crud.readAll());
         } else {
+            //TODO bez sensu, laczysz i od razu zamykasz getCurrentSession()?????
             connetionFactory.connect().close();
         }
     }

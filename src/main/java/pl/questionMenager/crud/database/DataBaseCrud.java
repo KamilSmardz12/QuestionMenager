@@ -14,7 +14,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 
-//TODO dokonczyc metody i zmienic, żeby cała aplikacja działała w zakresie jednej sesji
 public class DataBaseCrud implements Crud {
 
     private SessionFactory sessionFactory;
@@ -27,8 +26,6 @@ public class DataBaseCrud implements Crud {
 
     @Override
     public void create(String question, String answer) {
-        DataBaseTransformerFactory dataBaseTransformerFactory = new DataBaseTransformerFactory();
-        Session session = dataBaseTransformerFactory.connect().openSession();
         Transaction transaction = session.beginTransaction();
 
         try {
@@ -39,8 +36,6 @@ public class DataBaseCrud implements Crud {
             if (transaction != null) {
                 transaction.rollback();
             }
-        } finally {
-            session.close();
         }
     }
 
@@ -50,8 +45,6 @@ public class DataBaseCrud implements Crud {
      */
     @Override
     public void create(DifficultyLevel difficultyLevel, String question) {
-        DataBaseTransformerFactory dataBaseTransformerFactory = new DataBaseTransformerFactory();
-        Session session = dataBaseTransformerFactory.connect().openSession();
         Transaction transaction = session.beginTransaction();
 
         try {
@@ -62,15 +55,11 @@ public class DataBaseCrud implements Crud {
                 transaction.rollback();
             }
             e.printStackTrace();
-        } finally {
-            session.close();
         }
     }
 
     @Override
     public void create(DifficultyLevel difficultyLevel, String question, String answer) {
-        DataBaseTransformerFactory dataBaseTransformerFactory = new DataBaseTransformerFactory();
-        Session session = dataBaseTransformerFactory.connect().openSession();
         Transaction transaction = session.beginTransaction();
         try {
             session.save(new Question(question, answer, difficultyLevel));
@@ -80,16 +69,12 @@ public class DataBaseCrud implements Crud {
             if (transaction != null) {
                 transaction.rollback();
             }
-        } finally {
-            session.close();
         }
     }
 
-    //TODO sprawdzic.
+
     @Override
     public List<Question> readAll() {
-        DataBaseTransformerFactory dataBaseTransformerFactory = new DataBaseTransformerFactory();
-        Session session = dataBaseTransformerFactory.connect().openSession();
         session.beginTransaction();
         List<Question> questions = null;
         try {
@@ -98,16 +83,12 @@ public class DataBaseCrud implements Crud {
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
-        } finally {
-            session.close();
         }
         return questions;
     }
 
     @Override
     public List<Question> read(DifficultyLevel difficultyLevel) {
-        DataBaseTransformerFactory dataBaseTransformerFactory = new DataBaseTransformerFactory();
-        Session session = dataBaseTransformerFactory.connect().openSession();
         Transaction transaction = session.beginTransaction();
         List<Question> questionList = null;
         List<Question> collect = null;
@@ -118,88 +99,130 @@ public class DataBaseCrud implements Crud {
                     .collect(Collectors.toList());
             transaction.commit();
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
             e.printStackTrace();
-        } finally {
-            session.close();
         }
         return collect;
     }
 
     @Override
     public Question read(int id) {
-        DataBaseTransformerFactory dataBaseTransformerFactory = new DataBaseTransformerFactory();
-        Session session = dataBaseTransformerFactory.connect().openSession();
         Transaction transaction = session.beginTransaction();
         Question question = null;
-        try {
+        try {/*
             List<Question> questionList = readAll();
             Optional<Question> first = questionList.stream()
                     .filter(q -> q.getIdQuestion().equals(id))
                     .findFirst();
-            question = first.get();
+            question = first.get();*/
+            question = session.get(Question.class, id);
             transaction.commit();
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
             e.printStackTrace();
-        } finally {
-            session.close();
         }
         return question;
     }
 
     @Override
     public Question readRandomQuestion() {
+
         return null;
     }
 
-    //TODO dokonczyc
     @Override
     public void remove(int id) {
-        DataBaseTransformerFactory dataBaseTransformerFactory = new DataBaseTransformerFactory();
-        Session session = dataBaseTransformerFactory.connect().openSession();
         Transaction transaction = session.beginTransaction();
-        try{
-
-            //session.delete();
+        try {
+            Question questionToRemove = session.load(Question.class, id);
+            session.delete(questionToRemove);
             transaction.commit();
-        }catch (Exception e){
-            if (transaction!= null){
+        } catch (Exception e) {
+            if (transaction != null) {
                 transaction.rollback();
             }
+            e.printStackTrace();
         }
     }
 
     @Override
     public void updateAnswer(int id, String answer) {
-
+        Transaction transaction = session.beginTransaction();
+        try {
+            Question question = session.get(Question.class, id);
+            question.setAnswer(answer);
+            session.update(question);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void updateQuestion(int id, String question) {
-
+        Transaction transaction = session.beginTransaction();
+        try {
+            Question question1 = session.get(Question.class, id);
+            question1.setQuestion(question);
+            session.update(question1);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void updateDifficultyLevelAndAnswer(int id, DifficultyLevel difficultyLevel, String answer) {
-
+        Transaction transaction = session.beginTransaction();
+        try {
+            Question question = session.get(Question.class, id);
+            question.setAnswer(answer);
+            question.setDifficultyLevel(difficultyLevel.toString());
+            session.update(question);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void updateDifficultyLevelAndQuestion(int id, DifficultyLevel difficultyLevel, String question) {
-
+        Transaction transaction = session.beginTransaction();
+        try {
+            Question question1 = session.get(Question.class, id);
+            question1.setDifficultyLevel(difficultyLevel.toString());
+            question1.setQuestion(question);
+            session.update(question1);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void updateAnswerAndQuestion(int id, String answer, String question) {
-
-    }
-
-    private Session createSession() {
-        return sessionFactory.getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+        try {
+            Question question1 = session.get(Question.class, id);
+            question1.setAnswer(answer);
+            question1.setQuestion(question);
+            session.update(question1);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 }

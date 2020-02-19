@@ -8,7 +8,7 @@ Task                                                                    | Kolejn
 5 - Przerobienie struktury na osobne projekty                           | 1                                |
 6 - Gmail - łączenie z naszą pocztą i wysyłanie emaili do użytkownika   | 4                                |
 7 - Można dodać jsp (jak nie to zrobi sie plik bat i będzie konsola)    | 5                                |
-8 - CRUD do bazy (Hb.)                                                  | 1                                |
+8 - CRUD do bazy (Hb.)                                                  | 1                                | done
 9 - Stworzenie mapowania na tabele w Hibernate (2 tabele?)              | 2                                |
 10 - Przygotowanie pliku do automatycznego tworzenia danych potrzebnych
      do utworzenia bazy danych na nowym komputerze zgodnymi z danymi

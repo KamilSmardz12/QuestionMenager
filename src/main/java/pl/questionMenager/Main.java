@@ -3,11 +3,6 @@ package pl.questionMenager;
 import pl.questionMenager.controller.Controller;
 import pl.questionMenager.crud.Crud;
 import pl.questionMenager.model.DataType;
-import pl.questionMenager.transformer.file.JsonTransformer;
-import pl.questionMenager.model.Question;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -15,7 +10,11 @@ public class Main {
         //JsonTransformer transformObjectToJson = new JsonTransformer();
         //System.out.println(transformObjectToJson.read());
         Crud crud = Controller.create(DataType.DATABASE);
-        crud.create("Emilka", "Emilka");
+        crud.create("piesek", "DEmon");
+        crud.create("kotek","tosiek");
+        crud.create("papuga","ara");
+        crud.create("rybka","paletka");
+        crud.updateAnswer(1,"PIESEK");
         Controller.closeWorking(DataType.JSON);
     }
 }
