@@ -3,7 +3,7 @@ Task                                                                    | Kolejn
 0 - Stworzenie readme                                                   |                                  |
 1 - Zrobienie wersji konsolowej. Interfejs użytkownika                  | 2                                |
 2 - TESTY!                                                              | 0                                |
-3 - Logger - stworzenie dziennika działan, ogólnego dla całej aplikacji | 1                                |
+3 - Logger - stworzenie dziennika działan, ogólnego dla całej aplikacji | 1                                | Z
 4 - Synchronizacja bazy i jsona (zrobiłbym wątki)                       | 3                                |
 5 - Przerobienie struktury na osobne projekty                           | 1                                |
 6 - Gmail - łączenie z naszą pocztą i wysyłanie emaili do użytkownika   | 4                                |

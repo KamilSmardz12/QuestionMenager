@@ -20,7 +20,6 @@ final class HibernateConfig {
             try {
                 //konfiguracja
                 Configuration configuration = new Configuration();
-
                 //wlasciwosci
                 Properties properties = new Properties();
                 properties.put(Environment.DRIVER, "com.mysql.jdbc.Driver");
