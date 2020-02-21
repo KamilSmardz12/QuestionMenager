@@ -12,11 +12,11 @@ import javax.persistence.*;
 @Table(name = "Questions")
 public class Question {
 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idQuestion")
     private Integer idQuestion;
 
-    @Id
     @NonNull
     @Column(name = "question")
     private String question;
@@ -39,4 +39,5 @@ public class Question {
         this.answer = answer;
         this.difficultyLevel = difficultyLevel.toString();
     }
+
 }

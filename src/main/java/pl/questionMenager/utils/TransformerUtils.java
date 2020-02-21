@@ -2,13 +2,8 @@ package pl.questionMenager.utils;
 
 import lombok.NonNull;
 import lombok.extern.java.Log;
-import lombok.extern.slf4j.Slf4j;
-import pl.questionMenager.crud.database.DataBaseCrud;
-import pl.questionMenager.crud.file.JsonCrud;
 import pl.questionMenager.model.DataType;
 import pl.questionMenager.model.Question;
-import pl.questionMenager.transformer.database.DataBaseTransformerFactory;
-import pl.questionMenager.transformer.file.JsonTransformerFactory;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -89,6 +84,10 @@ public class TransformerUtils {
 
     public static boolean isJsonData(DataType dataType) {
         return dataType.equals(DataType.JSON);
+    }
+
+    public static boolean isDataBaseTEST(DataType dataType){
+        return dataType.equals(DataType.DATABASETEST);
     }
 
 }
