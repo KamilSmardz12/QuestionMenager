@@ -9,12 +9,13 @@ public class Main {
         // Nie generuje się id i metoda save nadpisuje plik
         //JsonTransformer transformObjectToJson = new JsonTransformer();
         //System.out.println(transformObjectToJson.read());
-        Crud crud = Controller.create(DataType.DATABASETEST);
+        Crud crud = Controller.create(DataType.DATABASE);
         crud.create("piesek", "DEmon");
         crud.create("kotek","tosiek");
         crud.create("papuga","ara");
         crud.create("rybka","paletka");
         crud.updateAnswer(1,"PIESEK");
-        Controller.closeWorking(DataType.DATABASETEST);
+        System.out.println(crud.readRandomQuestion());
+        Controller.closeWorking(DataType.DATABASE);
     }
 }

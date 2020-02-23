@@ -34,9 +34,15 @@ public class Question {
         this.difficultyLevel = DifficultyLevel.EMPTY.toString();
     }
 
-    public Question(@NonNull String question, @NonNull String answer, DifficultyLevel difficultyLevel) {
+    public Question(@NonNull String question, String answer, DifficultyLevel difficultyLevel) {
         this.question = question;
         this.answer = answer;
+        this.difficultyLevel = difficultyLevel.toString();
+    }
+
+    public Question(@NonNull String question, @NonNull DifficultyLevel difficultyLevel) {
+        this.question = question;
+        this.answer = null;
         this.difficultyLevel = difficultyLevel.toString();
     }
 

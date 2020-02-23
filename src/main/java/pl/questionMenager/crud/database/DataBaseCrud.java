@@ -9,67 +9,70 @@ import pl.questionMenager.model.DataType;
 import pl.questionMenager.model.DifficultyLevel;
 import pl.questionMenager.model.Question;
 import pl.questionMenager.transformer.database.DataBaseTransformerFactory;
+import pl.questionMenager.configuration.LoggerConfig;
 
 import java.util.List;
+import java.util.Random;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+
+//TODO sprawdzic roznice miedzy e.getMessage,  a e.getStackTrace().toString() !!!!!!!!!! pododawac obiekty do printu
+//TODO dokonczyc logowanie i ładnie sformatować
 
 public class DataBaseCrud implements Crud {
 
     private SessionFactory sessionFactory;
     private Session session;
-    private DataType dataType;
+    private Logger logger;
 
     public DataBaseCrud(@NotNull DataType dataType) {
         if (dataType.equals(DataType.DATABASETEST)) {
-            sessionFactory = new DataBaseTransformerFactory().connestTEST();
-        } else if(dataType.equals(DataType.DATABASE)) {
+            sessionFactory = new DataBaseTransformerFactory().connestH2();
+        } else if (dataType.equals(DataType.DATABASE)) {
             sessionFactory = new DataBaseTransformerFactory().connect();
         }
         session = sessionFactory.openSession();
+        logger = LoggerConfig.log();
     }
 
     @Override
     public void create(String question, String answer) {
-        Transaction transaction = session.beginTransaction();
-
+        session.beginTransaction();
         try {
             session.save(new Question(question, answer));
-            transaction.commit();
+            session.getTransaction().commit();
+            logger.info("question have been save to database || " + "question: " + question + " answer: " + answer);
         } catch (Exception e) {
-            e.getMessage();
-            if (transaction != null) {
-                transaction.rollback();
-            }
+            session.getTransaction().rollback();
+            logger.warning("something gone wrong, transaction is rollback || " + e.getStackTrace().toString());
         }
     }
 
-    /*
-    TODO modyfikator dostepu? Zeby zwyklu user nie wrzucil prostego pytania
-    TODO i dal, ze jest to mega trudne pytanie (DifficultyLevel.HARD)
-     */
+
     @Override
     public void create(DifficultyLevel difficultyLevel, String question) {
-        Transaction transaction = session.beginTransaction();
-
+        session.beginTransaction();
         try {
             session.save(new Question(question, null, difficultyLevel));
-            transaction.commit();
+            session.getTransaction().commit();
+            logger.info("question have been save to database || " + "question: " + question + " difficultLevel: " + difficultyLevel);
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
+            session.getTransaction().rollback();
+            logger.warning("something gone wrong, transaction is rollback || " + e.getStackTrace().toString());
         }
     }
 
     @Override
     public void create(DifficultyLevel difficultyLevel, String question, String answer) {
-        Transaction transaction = session.beginTransaction();
+        session.beginTransaction();
         try {
             session.save(new Question(question, answer, difficultyLevel));
-            transaction.commit();
+            session.getTransaction().commit();
+            logger.info("question have been save to database || " + "question: " + question + " answer: " + answer + " difficultLevel: " + difficultyLevel);
         } catch (Exception e) {
-            transaction.rollback();
+            session.getTransaction().rollback();
+            logger.warning("something gone wrong, transaction is rollback || " + e.getStackTrace().toString());
         }
     }
 
@@ -81,36 +84,40 @@ public class DataBaseCrud implements Crud {
         try {
             questions = session.createQuery("from Question").getResultList();
             session.getTransaction().commit();
+            logger.info("all questions were downloaded from the database");
         } catch (Exception e) {
-            e.printStackTrace();
             session.getTransaction().rollback();
+            logger.warning("something gone wrong, transaction is rollback" + e.getStackTrace().toString());
         }
         return questions;
     }
 
     @Override
     public List<Question> read(DifficultyLevel difficultyLevel) {
-        Transaction transaction = session.beginTransaction();
+        session.beginTransaction();
         List<Question> questions = null;
         try {
             questions = readAll().stream()
                     .filter(e -> e.getDifficultyLevel().equals(difficultyLevel))
                     .collect(Collectors.toList());
-            transaction.commit();
+            session.getTransaction().commit();
+            logger.info("all question with difficult level: " + difficultyLevel + " were downloaded from database");
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.warning(e.getStackTrace().toString());
         }
         return questions;
     }
 
     @Override
     public Question read(int id) {
-        Transaction transaction = session.beginTransaction();
+        session.beginTransaction();
         Question question = null;
         try {
             question = session.get(Question.class, id);
-            transaction.commit();
+            session.getTransaction().commit();
+            logger.info("question with id: " + id + " were downloaded from database || " + question.toString());
         } catch (Exception e) {
+            logger.warning("something gone wrong || " + e.getStackTrace().toString());
             e.printStackTrace();
         }
         return question;
@@ -118,69 +125,69 @@ public class DataBaseCrud implements Crud {
 
     @Override
     public Question readRandomQuestion() {
-
-        return null;
+        Random r = new Random();
+        Question question = readAll().get(r.nextInt(readAll().size()));
+        logger.info("a random question have been fetch from database || " + question.toString());
+        return question;
     }
 
     @Override
     public void remove(int id) {
-        Transaction transaction = session.beginTransaction();
+        session.beginTransaction();
         try {
             Question questionToRemove = session.load(Question.class, id);
             session.delete(questionToRemove);
-            transaction.commit();
+            session.getTransaction().commit();
+            logger.info("question with id:" + id + " were remove form database || " + questionToRemove.toString());
         } catch (Exception e) {
-                transaction.rollback();
-                        e.printStackTrace();
+            session.getTransaction().rollback();
+            logger.warning("something gone wrong, transaction is rollback || " + e.getStackTrace().toString());
         }
     }
 
     @Override
     public void updateAnswer(int id, String answer) {
-        Transaction transaction = session.beginTransaction();
+        session.beginTransaction();
         try {
-            Question question = session.get(Question.class, id);
-            question.setAnswer(answer);
-            session.update(question);
-            transaction.commit();
+            Question questiontoUpdata = session.get(Question.class, id);
+            questiontoUpdata.setAnswer(answer);
+            session.update(questiontoUpdata);
+            session.getTransaction().commit();
+            logger.info("question to Update with id: " + id + " were update || " + questiontoUpdata.toString());
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
+            session.getTransaction().rollback();
+            logger.warning("something gone wrong, transaction is rollback || " + e.getStackTrace().toString());
         }
     }
 
     @Override
     public void updateQuestion(int id, String question) {
-        Transaction transaction = session.beginTransaction();
+        session.beginTransaction();
         try {
-            Question question1 = session.get(Question.class, id);
-            question1.setQuestion(question);
-            session.update(question1);
-            transaction.commit();
+            Question questionToUpdate = session.get(Question.class, id);
+            questionToUpdate.setQuestion(question);
+            session.update(questionToUpdate);
+            session.getTransaction().commit();
+            logger.info("question to Update with id: " + id + " were update || " + questionToUpdate.toString());
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
+            session.getTransaction().rollback();
+            logger.warning("something gone wrong, transaction rollback || " + e.getStackTrace().toString());
         }
     }
 
     @Override
     public void updateDifficultyLevelAndAnswer(int id, DifficultyLevel difficultyLevel, String answer) {
-        Transaction transaction = session.beginTransaction();
+        session.beginTransaction();
         try {
-            Question question = session.get(Question.class, id);
-            question.setAnswer(answer);
-            question.setDifficultyLevel(difficultyLevel.toString());
-            session.update(question);
-            transaction.commit();
+            Question questionToUpdate = session.get(Question.class, id);
+            questionToUpdate.setAnswer(answer);
+            questionToUpdate.setDifficultyLevel(difficultyLevel.toString());
+            session.update(questionToUpdate);
+            session.getTransaction().commit();
+            logger.info("question to update with id: " + id + " were update || " + questionToUpdate.toString());
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
+            session.getTransaction().rollback();
+            logger.warning("something gone wrong, transaction rollback || " + e.getStackTrace().toString());
         }
     }
 
@@ -193,27 +200,26 @@ public class DataBaseCrud implements Crud {
             questionToUpdate.setQuestion(question);
             session.update(questionToUpdate);
             transaction.commit();
+            logger.info("question to update with id: " + id + " were update || " + questionToUpdate.toString());
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
+            transaction.rollback();
+            logger.warning("something gone wrong, transaction rollback || " + e.getStackTrace().toString());
         }
     }
 
     @Override
     public void updateAnswerAndQuestion(int id, String answer, String question) {
-        Transaction transaction = session.beginTransaction();
+        session.beginTransaction();
         try {
             Question questionToUpdate = session.get(Question.class, id);
             questionToUpdate.setAnswer(answer);
             questionToUpdate.setQuestion(question);
             session.update(questionToUpdate);
-            transaction.commit();
+            session.getTransaction().commit();
+            logger.info("question with id: " + id + " were update || " + questionToUpdate.toString());
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
+            session.getTransaction().rollback();
+            logger.warning("something gone wrong, transaction is rollback || " + e.getStackTrace().toString());
             e.printStackTrace();
         }
     }

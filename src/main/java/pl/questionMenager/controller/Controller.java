@@ -28,7 +28,7 @@ public class Controller {
         if (isJsonData(dataType)) {
             transformerFactory.save(crud.readAll());
         } else if (isDataBaseTEST(dataType)) {
-            connetionFactory.connestTEST().close();
+            connetionFactory.connestH2().close();
         } else {
             //TODO bez sensu, laczysz i od razu zamykasz getCurrentSession()?????
             connetionFactory.connect().close();
