@@ -41,33 +41,9 @@ public class JsonTransformer {
         this.filePath = DEFAULT_FILE_PATH;
     }
 
-    public JsonObject fromListOfQuestionToJsonObject(List<Question> questions) {
-        JsonObjectBuilder rootJsonBuilder = Json.createObjectBuilder();
-        JsonArrayBuilder questionsArrayBuilder = Json.createArrayBuilder();
-
-        questions.forEach((question) -> {
-            JsonObjectBuilder questionJsonBuilder = Json.createObjectBuilder();
-            questionsArrayBuilder.add(
-                    questionJsonBuilder
-                            .add(QUESTION, question.getQuestion())
-                            .add(ANSWER, question.getAnswer())
-                            .add(DIFFICULTY_LEVEL, question.getDifficultyLevel())
-                            .build());
-        });
-
-        JsonArray questionsArrayJson = questionsArrayBuilder.build();
-
-        //todo skad masz tu ta aktualna wersje ???
-        return rootJsonBuilder
-                .add(VERSION, calculateVersion(version))
-                .add(LAST_UPDATE, setPresentDateAndTime(CLOCK, DATE_TIME_FORMATTER))
-                .add(QUESTIONS, questionsArrayJson)
-                .build();
-    }
-
-    public void save(JsonObject rootJson){
+    public void save(List<Question> questions){
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath))) {
-            bufferedWriter.write(rootJson.toString());
+            bufferedWriter.write(convertQuestionsToJsonObject(questions).toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -80,7 +56,6 @@ public class JsonTransformer {
         JsonReader jsonReader = null;
         Map<Integer, Question> questions = new LinkedHashMap<>();
 
-        //zmienić na try with resources wszędzie gdzie są strumienie
         try {
             scanner = new Scanner(new File(filePath));
             InputStream inputStream = new ByteArrayInputStream(
@@ -110,6 +85,29 @@ public class JsonTransformer {
         TransformerUtils.isEmptyMap(questions);
 
         return questions;
+    }
+
+    private JsonObject convertQuestionsToJsonObject(List<Question> questions) {
+        JsonObjectBuilder rootJsonBuilder = Json.createObjectBuilder();
+        JsonArrayBuilder questionsArrayBuilder = Json.createArrayBuilder();
+
+        questions.forEach((question) -> {
+            JsonObjectBuilder questionJsonBuilder = Json.createObjectBuilder();
+            questionsArrayBuilder.add(
+                    questionJsonBuilder
+                            .add(QUESTION, question.getQuestion())
+                            .add(ANSWER, question.getAnswer())
+                            .add(DIFFICULTY_LEVEL, question.getDifficultyLevel())
+                            .build());
+        });
+
+        JsonArray questionsArrayJson = questionsArrayBuilder.build();
+
+        return rootJsonBuilder
+                .add(VERSION, calculateVersion(version))
+                .add(LAST_UPDATE, setPresentDateAndTime(CLOCK, DATE_TIME_FORMATTER))
+                .add(QUESTIONS, questionsArrayJson)
+                .build();
     }
 
 }

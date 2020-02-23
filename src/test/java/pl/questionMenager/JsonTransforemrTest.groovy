@@ -4,8 +4,6 @@ import pl.questionMenager.model.Question
 import pl.questionMenager.transformer.file.JsonTransformer
 import spock.lang.Specification
 
-import java.util.stream.IntStream
-
 class JsonTransforemrTest extends Specification {
 
     //todo good idea to put option that allow us to generate version of file. This will make unit test a little bit easier
@@ -17,7 +15,7 @@ class JsonTransforemrTest extends Specification {
             listOfQuestion.add(new Question("question" + i, "answer" + i))
         }
         when:
-        def rootJson = jsonTransformer.fromListOfQuestionToJsonObject(listOfQuestion).toString()
+        def rootJson = jsonTransformer.convertQuestionsToJsonObject(listOfQuestion).toString()
         then:
         rootJson == ""
 
