@@ -36,6 +36,8 @@ public class DataBaseCrud implements Crud {
         logger = LoggerConfig.log();
     }
 
+
+    //TODO
     @Override
     public void create(String question, String answer) {
         session.beginTransaction();
@@ -45,7 +47,7 @@ public class DataBaseCrud implements Crud {
             logger.info("question have been save to database || " + "question: " + question + " answer: " + answer);
         } catch (Exception e) {
             session.getTransaction().rollback();
-            logger.warning("something gone wrong, transaction is rollback || " + e.getStackTrace().toString());
+            logger.warning("something gone wrong, transaction is rollback || /n" + e.getStackTrace());
         }
     }
 
@@ -92,6 +94,7 @@ public class DataBaseCrud implements Crud {
         return questions;
     }
 
+    //TODO poprawic !!!!!!!!!!!!
     @Override
     public List<Question> read(DifficultyLevel difficultyLevel) {
         session.beginTransaction();

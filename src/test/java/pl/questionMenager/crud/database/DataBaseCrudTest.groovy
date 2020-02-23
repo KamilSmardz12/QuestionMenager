@@ -10,6 +10,8 @@ import pl.questionMenager.transformer.database.HibernateConfig
 import spock.lang.Shared
 import spock.lang.Specification
 
+import java.awt.List
+
 class DataBaseCrudTest extends Specification {
 
     def @Shared
@@ -58,11 +60,21 @@ class DataBaseCrudTest extends Specification {
         Question readQuestion = crud.read(1)
 
         then:
-        assert question==readQuestion
+        assert question == readQuestion
     }
 
     def "ReadAll"() {
 
+        given:
+        List expected = Arrays.asList(
+                new Question("question 1", "answer 1"),
+                new Question('pytanie 1','odpowiedz 1',DifficultyLevel.EMPTY)
+        )
+        crud.create("question 1", "answer 1")
+        when:
+        List questions = crud.readAll()
+        then:
+        assert questions == expected
     }
 
     def "should read object with id"() {

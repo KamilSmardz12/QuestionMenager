@@ -27,6 +27,7 @@ public class Controller {
     public static void closeWorking(DataType dataType) {
         if (isJsonData(dataType)) {
             transformerFactory.save(crud.readAll());
+
         } else if (isDataBaseTEST(dataType)) {
             connetionFactory.connestH2().close();
         } else {
