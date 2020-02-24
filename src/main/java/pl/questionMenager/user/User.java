@@ -1,16 +1,37 @@
 package pl.questionMenager.user;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+
 public class User {
 
-    private final UserProperties userProperties;
-    public User(String login, String password) {
-        //spr. w bazie i pobranie danych i ustawienie w userProperties
-        new UserChecker().getUser()
-        userProperties = UserProperties
-                .builder()
+    private final Session session;
+
+    public User(SessionFactory sessionFactory) {
+        session = sessionFactory.openSession();
+    }
+
+    public UserProperties getUserProperties(String login, String password) {
+        String privileges = null;
+        session.beginTransaction();
+        try {
+            String query = "SELECT u.privileges FROM User AS u WHERE u.login = " + login + " u.password =" + password;
+            privileges = (String) session.createQuery(query).getSingleResult();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+        }
+
+        return UserProperties.builder()
                 .login(login)
                 .password(password)
-                .privileges()
+                .name("")
+                .privileges(setPrivileges(privileges))
                 .build();
+    }
+
+    private Privilege setPrivileges(String privileges) {
+        return privileges == null ? Privilege.DEFAULT : Privilege.valueOf(privileges);
     }
 }

@@ -1,11 +1,10 @@
 package pl.questionMenager.crud.database
 
-import org.hibernate.SessionFactory
+
 import pl.questionMenager.controller.Controller
 import pl.questionMenager.crud.Crud
 import pl.questionMenager.model.DataType
 import pl.questionMenager.model.Question
-import pl.questionMenager.transformer.database.HibernateConfig
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -14,11 +13,11 @@ class DataBaseCrudTest extends Specification {
     def @Shared Crud crud
 
     def setupSpec() {
-        crud = Controller.create(DataType.DATABASETEST)
+        crud = Controller.createConnectionWithData(DataType.DATABASETEST)
     }
 
     def cleanupSpec() {
-        Controller.closeWorking(DataType.DATABASETEST)
+        Controller.closeConnection(DataType.DATABASETEST)
     }
 
 
@@ -71,3 +70,4 @@ class DataBaseCrudTest extends Specification {
     def "UpdateAnswerAndQuestion"() {
     }
 }
+

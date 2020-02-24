@@ -41,7 +41,7 @@ public class JsonTransformer {
         this.filePath = DEFAULT_FILE_PATH;
     }
 
-    public void save(List<Question> questions){
+    public void save(List<Question> questions) {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath))) {
             bufferedWriter.write(convertQuestionsToJsonObject(questions).toString());
         } catch (IOException e) {
@@ -55,7 +55,6 @@ public class JsonTransformer {
         @Cleanup
         JsonReader jsonReader = null;
         Map<Integer, Question> questions = new LinkedHashMap<>();
-
         try {
             scanner = new Scanner(new File(filePath));
             InputStream inputStream = new ByteArrayInputStream(
@@ -67,24 +66,25 @@ public class JsonTransformer {
             JsonObject jsonObject = jsonReader.readObject();
             version = jsonObject.getString(VERSION);
             JsonArray jsonArray = jsonObject.getJsonArray(QUESTIONS);
-
-            IntStream.range(0, jsonArray.size()).forEach(i -> {
-                questions.put(i,
-                        new Question(
-                                jsonArray.getJsonObject(i).getString(QUESTION),
-                                jsonArray.getJsonObject(i).getString(ANSWER),
-                                DifficultyLevel.valueOf(jsonArray.getJsonObject(i).getString(DIFFICULTY_LEVEL))
-                        )
-                );
-            });
-
+            putQuestions(jsonArray, questions);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         TransformerUtils.isEmptyMap(questions);
-
         return questions;
+    }
+
+    private void putQuestions(JsonArray jsonArray, Map<Integer, Question> questions) {
+        IntStream.range(0, jsonArray.size()).forEach(i -> {
+            questions.put(i,
+                    new Question(
+                            jsonArray.getJsonObject(i).getString(QUESTION),
+                            jsonArray.getJsonObject(i).getString(ANSWER),
+                            DifficultyLevel.valueOf(jsonArray.getJsonObject(i).getString(DIFFICULTY_LEVEL))
+                    )
+            );
+        });
     }
 
     private JsonObject convertQuestionsToJsonObject(List<Question> questions) {
