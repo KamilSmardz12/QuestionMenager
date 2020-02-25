@@ -8,7 +8,8 @@ import pl.questionMenager.transformer.ConnetionFactory;
 import pl.questionMenager.transformer.TransformerFactory;
 import pl.questionMenager.transformer.database.DataBaseTransformerFactory;
 import pl.questionMenager.transformer.file.JsonTransformerFactory;
-import pl.questionMenager.view.CrudView;
+
+import javax.swing.text.View;
 
 import static pl.questionMenager.utils.TransformerUtils.*;
 
@@ -17,7 +18,7 @@ public class Controller {
     private static TransformerFactory transformerFactory;
     private static ConnetionFactory connetionFactory;
     private static Crud crud;
-    private static CrudView view;
+    private static View view;
 
     public static Crud create(DataType dataType) {
         checkDataType(dataType);

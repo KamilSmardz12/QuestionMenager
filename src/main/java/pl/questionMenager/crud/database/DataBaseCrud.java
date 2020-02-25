@@ -27,42 +27,24 @@ public class DataBaseCrud implements Crud {
     private Logger logger;
 
     public DataBaseCrud(@NotNull DataType dataType) {
-        if (dataType.equals(DataType.DATABASETEST)) {
+        if (dataType.equals(DataType.H2)) {
             sessionFactory = new DataBaseTransformerFactory().connestH2();
-        } else if (dataType.equals(DataType.DATABASE)) {
+        } else {
             sessionFactory = new DataBaseTransformerFactory().connect();
         }
         session = sessionFactory.openSession();
         logger = LoggerConfig.log();
     }
 
-
-    //TODO
     @Override
     public void create(String question, String answer) {
-        session.beginTransaction();
-        try {
-            session.save(new Question(question, answer));
-            session.getTransaction().commit();
-            logger.info("question have been save to database || " + "question: " + question + " answer: " + answer);
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            logger.warning("something gone wrong, transaction is rollback || /n" + e.getStackTrace());
-        }
+        create(DifficultyLevel.EMPTY,question,answer);
     }
 
 
     @Override
     public void create(DifficultyLevel difficultyLevel, String question) {
-        session.beginTransaction();
-        try {
-            session.save(new Question(question, null, difficultyLevel));
-            session.getTransaction().commit();
-            logger.info("question have been save to database || " + "question: " + question + " difficultLevel: " + difficultyLevel);
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            logger.warning("something gone wrong, transaction is rollback || " + e.getStackTrace().toString());
-        }
+        create(difficultyLevel,question,null);
     }
 
     @Override
@@ -100,13 +82,13 @@ public class DataBaseCrud implements Crud {
         session.beginTransaction();
         List<Question> questions = null;
         try {
-            questions = readAll().stream()
-                    .filter(e -> e.getDifficultyLevel().equals(difficultyLevel))
-                    .collect(Collectors.toList());
+            String query = "SELECT * FROM Questions q WHERE q.difficultyLevel = " + difficultyLevel;
+            List<String> resultList = session.createQuery(query).getResultList();
+            resultList.forEach(System.out::println);
             session.getTransaction().commit();
             logger.info("all question with difficult level: " + difficultyLevel + " were downloaded from database");
         } catch (Exception e) {
-            logger.warning(e.getStackTrace().toString());
+            logger.warning(e.getStackTrace() + "");
         }
         return questions;
     }
@@ -120,7 +102,7 @@ public class DataBaseCrud implements Crud {
             session.getTransaction().commit();
             logger.info("question with id: " + id + " were downloaded from database || " + question.toString());
         } catch (Exception e) {
-            logger.warning("something gone wrong || " + e.getStackTrace().toString());
+            logger.warning("something gone wrong || " + e.getStackTrace());
             e.printStackTrace();
         }
         return question;
