@@ -57,7 +57,6 @@ public class JsonTransformer {
 
         JsonArray questionsArrayJson = questionsArrayBuilder.build();
 
-        //todo skad masz tu ta aktualna wersje ???
         return rootJsonBuilder
                 .add(VERSION, calculateVersion(version))
                 .add(LAST_UPDATE, setPresentDateAndTime(CLOCK, DATE_TIME_FORMATTER))

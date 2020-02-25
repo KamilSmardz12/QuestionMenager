@@ -4,8 +4,10 @@ import pl.questionMenager.crud.Crud;
 import pl.questionMenager.model.DifficultyLevel;
 import pl.questionMenager.model.Question;
 
-import java.lang.reflect.Method;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 //TODO ograć puste pola (tam gdzie null)
@@ -64,18 +66,15 @@ public class JsonCrud implements Crud {
 
         for (Map.Entry<Integer, Question> entry : questions.entrySet()) {
             if (entry.getKey().equals(number)) {
-                Question q = entry.getValue();
-                question = new Question(
-                        q.getQuestion(),
-                        q.getAnswer(),
-                        DifficultyLevel.valueOf(q.getDifficultyLevel())
-                );
+                question = entry.getValue();
+                break;
             }
         }
 
         return question;
     }
 
+    //TODO connect
     @Override
     public void updateAnswer(int id, String answer) {
         questions.entrySet().stream()

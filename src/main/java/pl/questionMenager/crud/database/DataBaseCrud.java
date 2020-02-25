@@ -4,17 +4,18 @@ import com.sun.istack.NotNull;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import pl.questionMenager.configuration.LoggerConfig;
 import pl.questionMenager.crud.Crud;
 import pl.questionMenager.model.DataType;
 import pl.questionMenager.model.DifficultyLevel;
 import pl.questionMenager.model.Question;
 import pl.questionMenager.transformer.database.DataBaseTransformerFactory;
-import pl.questionMenager.configuration.LoggerConfig;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 
 //TODO sprawdzic roznice miedzy e.getMessage,  a e.getStackTrace().toString() !!!!!!!!!! pododawac obiekty do printu
@@ -32,24 +33,25 @@ public class DataBaseCrud implements Crud {
         } else {
             sessionFactory = new DataBaseTransformerFactory().connect();
         }
+        //TODO usuwanie
         session = sessionFactory.openSession();
         logger = LoggerConfig.log();
     }
 
     @Override
     public void create(String question, String answer) {
-        create(DifficultyLevel.EMPTY,question,answer);
+        create(DifficultyLevel.EMPTY, question, answer);
     }
 
 
     @Override
     public void create(DifficultyLevel difficultyLevel, String question) {
-        create(difficultyLevel,question,null);
+        create(difficultyLevel, question, null);
     }
 
     @Override
     public void create(DifficultyLevel difficultyLevel, String question, String answer) {
-        session.beginTransaction();
+        //session.getSession().beginTransaction();
         try {
             session.save(new Question(question, answer, difficultyLevel));
             session.getTransaction().commit();
@@ -82,13 +84,24 @@ public class DataBaseCrud implements Crud {
         session.beginTransaction();
         List<Question> questions = null;
         try {
-            String query = "SELECT * FROM Questions q WHERE q.difficultyLevel = " + difficultyLevel;
-            List<String> resultList = session.createQuery(query).getResultList();
-            resultList.forEach(System.out::println);
+            String query = "select q.question, q.answer, q.difficultyLevel from Questions q";
+            List<Object[]> resultList = session.createSQLQuery(query).list();
+            questions = createQuestions(resultList);
             session.getTransaction().commit();
             logger.info("all question with difficult level: " + difficultyLevel + " were downloaded from database");
         } catch (Exception e) {
             logger.warning(e.getStackTrace() + "");
+        }
+        return questions;
+    }
+
+    private List<Question> createQuestions( List<Object[]> resultList) {
+        List<Question> questions = new LinkedList<>();
+        for (Object[] object : resultList) {
+            questions.add(new Question(
+                    object[0].toString(),
+                    object[1].toString(),
+                    DifficultyLevel.valueOf(object[2].toString())));
         }
         return questions;
     }
@@ -116,6 +129,8 @@ public class DataBaseCrud implements Crud {
         return question;
     }
 
+
+    //TODO nie dziala
     @Override
     public void remove(int id) {
         session.beginTransaction();

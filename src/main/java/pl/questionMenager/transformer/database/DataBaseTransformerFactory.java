@@ -16,7 +16,7 @@ public class DataBaseTransformerFactory implements ConnetionFactory {
                 .user("user-name")
                 .pass("RootPassword!123456!")
                 .show_sql("true")
-                .hbm2ddl_auto("create")
+                .hbm2ddl_auto("update")
                 .build()
         );
     }
