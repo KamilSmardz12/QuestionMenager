@@ -8,10 +8,13 @@ import pl.questionMenager.model.DataType;
 import pl.questionMenager.transformer.TransformerFactory;
 import pl.questionMenager.transformer.database.DataBaseTransformerFactory;
 import pl.questionMenager.transformer.file.JsonTransformerFactory;
+import pl.questionMenager.user.DataToLogin;
+import pl.questionMenager.user.Privilege;
 import pl.questionMenager.user.User;
 import pl.questionMenager.user.UserProperties;
-import pl.questionMenager.view.CrudView;
+import pl.questionMenager.view.View;
 
+import static pl.questionMenager.controller.PobieraczDanych.logIn;
 import static pl.questionMenager.utils.TransformerUtils.isDataBaseTEST;
 import static pl.questionMenager.utils.TransformerUtils.isJsonData;
 
@@ -19,14 +22,9 @@ public class Controller {
 
     private static TransformerFactory transformerFactory;
     private static SessionFactory sessionFactory;
-    private static Crud crud;
-    private static CrudView view;
+    private static pl.questionMenager.crud.Crud crud;
+    private static View view;
     private static UserProperties userProperties;
-
-    public  Crud createConnectionWithData(DataType dataType) {
-        checkDataType(dataType);
-        return crud;
-    }
 
     public  void closeConnection(DataType dataType) {
         if (isJsonData(dataType)) {
@@ -34,12 +32,11 @@ public class Controller {
         } else if (isDataBaseTEST(dataType)) {
             sessionFactory.close();
         } else {
-            //TODO bez sensu, laczysz i od razu zamykasz getCurrentSession()?????
             sessionFactory.close();
         }
     }
 
-    private void checkDataType(DataType dataType) {
+    private void createSuitableConnection(DataType dataType) {
         if (isJsonData(dataType)) {
             transformerFactory = new JsonTransformerFactory();
             crud = new JsonCrud(transformerFactory.read());
@@ -48,12 +45,27 @@ public class Controller {
             crud = new DataBaseCrud(dataType);
         }
     }
-    
-    private UserProperties getUser(String login, String password){
+
+    private UserProperties getUser(String login, String password,SessionFactory sessionFactory){
         return new User(sessionFactory).getUserProperties(login,password);
     }
 
-    public static void start(){
+    public void start(){
+        view.welcome();
+        view.login();
+        DataToLogin dataToLogin = logIn();
+        UserProperties user = getUser(dataToLogin.getLogin(), dataToLogin.getPassword(), sessionFactory);
+        switch (user.getPrivileges()){
+            case USER_WITH_PRIVILEGES_TO_ADD:
+                view.interfejsDlaUD();
+                break;
+            case ADMIN:
+                view.interfejsDlaADMINA();
+                break;
+            default:
+                view.defaulte();
+        }
+        view.selectData();
 
     }
 }

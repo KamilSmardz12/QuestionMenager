@@ -12,15 +12,9 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-
-        Crud crud = Controller.create(DataType.HIBERNATE);
-        crud.remove(1);
-        crud.remove(2);
-        crud.remove(3);
-        crud.remove(4);
-        List<Question> questionList = crud.readAll();
-        System.out.println(questionList.size());
-        Controller.closeWorking(DataType.HIBERNATE);
+        Controller controller = new Controller();
+        Crud crud = controller.createConnectionWithData(DataType.HIBERNATE);
+        System.out.println(crud.read(1));
 
     }
 }

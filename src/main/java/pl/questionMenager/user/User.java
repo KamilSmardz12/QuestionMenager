@@ -11,6 +11,8 @@ public class User {
         session = sessionFactory.openSession();
     }
 
+
+    //TODO lista obiektow przerobic
     public UserProperties getUserProperties(String login, String password) {
         String privileges = null;
         session.beginTransaction();
