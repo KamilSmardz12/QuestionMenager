@@ -2,19 +2,25 @@ package pl.questionMenager;
 
 import pl.questionMenager.controller.Controller;
 import pl.questionMenager.crud.Crud;
+import pl.questionMenager.crud.file.JsonCrud;
 import pl.questionMenager.model.DataType;
+import pl.questionMenager.model.DifficultyLevel;
+import pl.questionMenager.model.Question;
+
+import java.lang.reflect.Method;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        // Nie generuje się id i metoda save nadpisuje plik
-        //JsonTransformer transformObjectToJson = new JsonTransformer();
-        //System.out.println(transformObjectToJson.read());
-        Crud crud = Controller.createConnectionWithData(DataType.DATABASETEST);
-        crud.create("piesek", "DEmon");
-        crud.create("kotek","tosiek");
-        crud.create("papuga","ara");
-        crud.create("rybka","paletka");
-        crud.updateAnswer(1,"PIESEK");
-        Controller.closeConnection(DataType.DATABASETEST);
+
+        Crud crud = Controller.create(DataType.HIBERNATE);
+        crud.remove(1);
+        crud.remove(2);
+        crud.remove(3);
+        crud.remove(4);
+        List<Question> questionList = crud.readAll();
+        System.out.println(questionList.size());
+        Controller.closeWorking(DataType.HIBERNATE);
+
     }
 }

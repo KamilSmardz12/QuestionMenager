@@ -1,7 +1,7 @@
 package pl.questionMenager.model;
 
 public enum DataType {
-    DATABASE,
-    DATABASETEST,
+    HIBERNATE,
+    H2,
     JSON;
 }

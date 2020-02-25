@@ -5,6 +5,6 @@ import org.hibernate.SessionFactory;
 public interface ConnetionFactory {
 
     SessionFactory connect();
-    SessionFactory connestTEST();
+    SessionFactory connestH2();
 
 }
