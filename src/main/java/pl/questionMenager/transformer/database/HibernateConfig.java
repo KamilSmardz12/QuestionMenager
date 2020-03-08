@@ -6,6 +6,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 import pl.questionMenager.model.Question;
+import pl.questionMenager.user.UserProperties;
 
 import java.util.Properties;
 
@@ -33,7 +34,8 @@ final class HibernateConfig {
 
                 configuration.setProperties(properties);
                 //can chain method
-                configuration.addAnnotatedClass(Question.class);
+                configuration.addAnnotatedClass(Question.class)
+                        .addAnnotatedClass(UserProperties.class);
 
                 ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                         .applySettings(configuration.getProperties())

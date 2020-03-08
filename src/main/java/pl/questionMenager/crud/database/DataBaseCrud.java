@@ -84,7 +84,7 @@ public class DataBaseCrud implements Crud {
         session.beginTransaction();
         List<Question> questions = null;
         try {
-            String query = "select q.question, q.answer, q.difficultyLevel from Questions q";
+            String query = "SELECT q.question, q.answer, q.difficultyLevel FROM Questions q";
             List<Object[]> resultList = session.createSQLQuery(query).list();
             questions = createQuestions(resultList);
             session.getTransaction().commit();

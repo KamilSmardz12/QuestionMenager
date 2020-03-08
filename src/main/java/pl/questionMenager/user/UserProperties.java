@@ -10,7 +10,7 @@ import javax.persistence.Id;
 
 @Getter
 @Builder
-@Entity
+@Entity(name = "User")
 public class UserProperties {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

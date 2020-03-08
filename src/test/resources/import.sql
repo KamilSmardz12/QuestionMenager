@@ -1,3 +1,6 @@
-
-
-INSERT INTO Questions VALUES (1,'pytanie 1','odpowiedz 1','EMPTY')
+INSERT INTO Questions VALUES (1,'odpowiedz 1','EMPTY','pytanie 1')
+INSERT INTO Questions VALUES (2,'odpowiedz 2','EMPTY','pytanie 2')
+INSERT INTO Questions VALUES (3,'odpowiedz 3','EMPTY','pytanie 3')
+INSERT INTO Questions VALUES (4,'odpowiedz 4','EMPTY','pytanie 4')
+INSERT INTO Questions VALUES (5,'odpowiedz 5','EMPTY','pytanie 5')
+INSERT INTO Questions VALUES (6,'odpowiedz 6','EMPTY','pytanie 6')

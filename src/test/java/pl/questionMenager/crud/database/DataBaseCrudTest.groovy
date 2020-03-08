@@ -1,6 +1,5 @@
 package pl.questionMenager.crud.database
 
-
 import pl.questionMenager.controller.Controller
 import pl.questionMenager.crud.Crud
 import pl.questionMenager.model.DataType
@@ -9,111 +8,143 @@ import pl.questionMenager.model.Question
 import spock.lang.Shared
 import spock.lang.Specification
 
-import java.awt.List
-
 class DataBaseCrudTest extends Specification {
 
     def @Shared
     Crud crud
 
     def setupSpec() {
-        crud = Controller.create(DataType.H2)
+        crud = Controller.createSuitableConnectionForH2(DataType.H2)
     }
 
     def cleanupSpec() {
-        Controller.closeWorking(DataType.H2)
+        Controller.closeConnectionH2()
     }
 
 
     def "Create method should save question(question: test 1,answer: test 1) "() {
         given: "expected question"
         Question expectedQuestion = new Question("test 1", "test 2")
-        expectedQuestion.setIdQuestion(1)
+        expectedQuestion.setIdQuestion(7)
 
         when: "save question to database"
         crud.create("test 1", "test 2")
 
         then: "assertion"
-        Question question = crud.read(1)
+        Question question = crud.read(7)
         assert question == expectedQuestion
     }
 
     def "create method should save question(question: test 1, difficultyLevel: EMPTY)"() {
         given:
         Question question = new Question("test 1", null, DifficultyLevel.EMPTY)
-        question.setIdQuestion(1)
+        question.setIdQuestion(7)
 
         when:
         crud.create(DifficultyLevel.EMPTY, "test 1")
 
         then:
-        Question readQuestion = crud.read(1)
-        assert readQuestion == question
+        Question readQuestion = crud.read(7)
+        assert readQuestion.equals(question)
     }
 
-    def "TestCreate1"() {
+
+    def "read method should return question object with id = #id , answer = #answers , difficult Level = #difficultyLevel and question = #questions"() {
+        expect:
+        Question expected = crud.read(id)
+        expected.answer == answers
+        expected.difficultyLevel == difficultyLevel
+        expected.question == questions
+
+        where:
+        id || answers       || difficultyLevel || questions
+        1  || "odpowiedz 1" || "EMPTY"         || "pytanie 1"
+        2  || "odpowiedz 2" || "EMPTY"         || "pytanie 2"
+        3  || "odpowiedz 3" || "EMPTY"         || "pytanie 3"
+        4  || "odpowiedz 4" || "EMPTY"         || "pytanie 4"
+        5  || "odpowiedz 5" || "EMPTY"         || "pytanie 5"
+        6  || "odpowiedz 6" || "EMPTY"         || "pytanie 6"
+    }
+
+    def "should read all questions from database"() {
         given:
-        Question question = new Question(1, "pytanie 1", "odpowiedz 1", "EMPTY")
+        def allQuestions = crud.readAll().asList()
 
-        when:
-        Question readQuestion = crud.read(1)
+        expect:
+        allQuestions.get(id - 1).question == questions
+        allQuestions.get(id - 1).difficultyLevel == difficultyLevel
+        allQuestions.get(id - 1).answer == answers
 
-        then:
-        assert question == readQuestion
-    }
-
-    def "ReadAll"() {
-
-        given:
-        List expected = Arrays.asList(
-                new Question("question 1", "answer 1"),
-                new Question('pytanie 1','odpowiedz 1',DifficultyLevel.EMPTY)
-        )
-        crud.create("question 1", "answer 1")
-        when:
-        List questions = crud.readAll()
-        then:
-        assert questions == expected
-    }
-
-    def "should read object with id"() {
-        given:
-        /*crud.create("test 1", "test 1")
-        crud.create("test 2", "test 2")*/
-        when:
-        Question question = crud.read(2)
-        then:
-        question.equals(new Question(2, "test 2", "test 2", "EMPTY"))
-    }
-
-    def "TestRead"() {
-        /*given:
-        Question question1 = new Question(1,"pytanie 1","odpowiedz 1","EMPTY")
-        when:
-        Question question = crud.read(1)
-        then:
-        question.equals(question1)
-*/
+        where:
+        id || answers       || difficultyLevel || questions
+        1  || "odpowiedz 1" || "EMPTY"         || "pytanie 1"
+        2  || "odpowiedz 2" || "EMPTY"         || "pytanie 2"
+        3  || "odpowiedz 3" || "EMPTY"         || "pytanie 3"
+        4  || "odpowiedz 4" || "EMPTY"         || "pytanie 4"
+        5  || "odpowiedz 5" || "EMPTY"         || "pytanie 5"
+        6  || "odpowiedz 6" || "EMPTY"         || "pytanie 6"
     }
 
     def "ReadRandomQuestion"() {
+        when:
+        def question = crud.readRandomQuestion()
+        then:
+        question instanceof  Question
     }
 
     def "Remove"() {
+        given:
+        def questions = crud.readAll().asList()
+        when:
+        crud.remove(1)
+        then:
+        crud.readAll().asList().size() != questions.size()
+
+    }
+
+    def "Remove 1"() {
+        given:
+        def questions = crud.readAll().asList()
+        when:
+        for (int i = 0; i < questions.size(); i++) {
+            crud.remove(i + 1)
+        }
+        then:
+        crud.readAll().asList().isEmpty()
     }
 
     def "UpdateAnswer"() {
+        when:
+        crud.updateAnswer(1, "updata odpowiedz 1")
+        then:
+        crud.read(1).answer == "updata odpowiedz 1"
     }
 
     def "UpdateQuestion"() {
+        when:
+        crud.updateQuestion(1, "update pytanie 1")
+        then:
+        crud.read(1).question == "update pytanie 1"
     }
 
     def "UpdateDifficultyLevelAndAnswer"() {
+        when:
+        crud.updateDifficultyLevelAndAnswer(1, DifficultyLevel.HARD, "update odpowiedz 1")
+        then:
+        crud.read(1).difficultyLevel == DifficultyLevel.HARD.toString() && crud.read(1).answer == "update odpowiedz 1"
     }
 
     def "UpdateDifficultyLevelAndQuestion"() {
+        when:
+        crud.updateDifficultyLevelAndQuestion(1, DifficultyLevel.AVERAGE, "update pytanie 1")
+        then:
+        crud.read(1).difficultyLevel == DifficultyLevel.AVERAGE.toString() && crud.read(1).question == "update pytanie 1"
     }
 
     def "UpdateAnswerAndQuestion"() {
+        when:
+        crud.updateAnswerAndQuestion(1, "update odpowiedz 1", "update pytanie 1")
+        then:
+        crud.read(1).answer == "update odpowiedz 1" && crud.read(1).question == "update pytanie 1"
     }
 }

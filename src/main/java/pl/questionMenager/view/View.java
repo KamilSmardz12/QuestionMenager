@@ -1,31 +1,43 @@
 package pl.questionMenager.view;
 
-import javafx.util.Pair;
-import pl.questionMenager.model.DataType;
+import pl.questionMenager.crud.Crud;
 
 import java.util.Scanner;
 
-import static pl.questionMenager.model.DataType.HIBERNATE;
-import static pl.questionMenager.model.DataType.JSON;
-
 public class View {
+    private Scanner sc = new Scanner(System.in);
 
-
+    //TODO
     public void login() {
-        System.out.println(ClientMessage.LOGIN);
+        System.out.println(ClientMessage.LOGIN.getMessage());
     }
 
-
+    //TODO
     public void goodBye() {
         System.out.println(ClientMessage.GOODBYE);
     }
 
+    //TODO
     public void selectData() {
-        System.out.println(ClientMessage.SELECT_THE_CONNECTION_TYPE);
+        System.out.println(ClientMessage.SELECT_THE_CONNECTION_TYPE.getMessage());
 
     }
 
-    public void welcome(){
-        System.out.println(ClientMessage.WELCOME);
+    //TODO
+    public void welcome() {
+        System.out.println(ClientMessage.WELCOME.getMessage());
+    }
+
+    public void defaulte(Crud crud) {
+        System.out.println("wybierz opcje");
+        System.out.println("1");
+        switch (sc.nextInt()) {
+            case 1:
+                System.out.println("podaj id pytania:");
+                System.out.println(crud.read(sc.nextInt()));
+                break;
+            case 2:
+                break;
+        }
     }
 }

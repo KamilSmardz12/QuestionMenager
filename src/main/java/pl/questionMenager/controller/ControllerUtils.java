@@ -8,6 +8,11 @@ import pl.questionMenager.user.UserProperties;
 public class ControllerUtils {
     //TODO fk ktora sprawdzi dostep uzytkownika
     public static boolean checkPrivilege(UserProperties userProperties){
-        return false;
+        if (userProperties.getPrivileges().equals(Privilege.ADMIN)){
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }
