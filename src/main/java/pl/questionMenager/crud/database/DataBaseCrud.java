@@ -11,7 +11,6 @@ import pl.questionMenager.model.DifficultyLevel;
 import pl.questionMenager.model.Question;
 import pl.questionMenager.transformer.database.DataBaseTransformerFactory;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -36,6 +35,10 @@ public class DataBaseCrud implements Crud {
         //TODO usuwanie
         session = sessionFactory.openSession();
         logger = LoggerConfig.log();
+    }
+
+    public Session getSession() {
+        return session;
     }
 
     @Override

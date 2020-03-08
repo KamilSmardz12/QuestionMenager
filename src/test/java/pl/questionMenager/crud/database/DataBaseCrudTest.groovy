@@ -14,7 +14,14 @@ class DataBaseCrudTest extends Specification {
     Crud crud
 
     def setupSpec() {
-        crud = Controller.createSuitableConnectionForH2(DataType.H2)
+        crud = new DataBaseCrud(DataType.H2)
+
+    }
+
+    def setup(){
+        crud.getSession().beginTransaction()
+        crud.getSession().createSQLQuery("TRUNCATE TABLE Questions")
+        crud.getSession().getTransaction().commit()
     }
 
     def cleanupSpec() {

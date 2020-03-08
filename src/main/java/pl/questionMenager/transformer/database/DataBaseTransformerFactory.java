@@ -30,7 +30,7 @@ public class DataBaseTransformerFactory implements ConnetionFactory {
                 .user("sa")
                 .pass("")
                 .show_sql("true")
-                .hbm2ddl_auto("create") //ihbm2ddl_auto have to be set for "create", otherwise hibernate won't import import.sql file
+                .hbm2ddl_auto("create-drop") //ihbm2ddl_auto have to be set for "create", otherwise hibernate won't import import.sql file
                 .build()
         );
     }
