@@ -10,24 +10,17 @@ import spock.lang.Specification
 
 class DataBaseCrudTest extends Specification {
 
-    def @Shared
-    Crud crud
-
-    def setupSpec() {
-        crud = new DataBaseCrud(DataType.H2)
-
-    }
+   static Crud crud = new DataBaseCrud(DataType.H2)
 
     def setup(){
         crud.getSession().beginTransaction()
-        crud.getSession().createSQLQuery("TRUNCATE TABLE Questions")
+        crud.getSession().createSQLQuery("DELETE TABLE Questions")
         crud.getSession().getTransaction().commit()
     }
 
     def cleanupSpec() {
         Controller.closeConnectionH2()
     }
-
 
     def "Create method should save question(question: test 1,answer: test 1) "() {
         given: "expected question"
@@ -44,6 +37,9 @@ class DataBaseCrudTest extends Specification {
 
     def "create method should save question(question: test 1, difficultyLevel: EMPTY)"() {
         given:
+        crud.getSession().beginTransaction()
+        crud.getSession().createSQLQuery("DELETE  TABLE Questions")
+        crud.getSession().getTransaction().commit()
         Question question = new Question("test 1", null, DifficultyLevel.EMPTY)
         question.setIdQuestion(7)
 
@@ -52,7 +48,7 @@ class DataBaseCrudTest extends Specification {
 
         then:
         Question readQuestion = crud.read(7)
-        assert readQuestion.equals(question)
+        assert readQuestion == question
     }
 
 
@@ -64,13 +60,13 @@ class DataBaseCrudTest extends Specification {
         expected.question == questions
 
         where:
-        id || answers       || difficultyLevel || questions
-        1  || "odpowiedz 1" || "EMPTY"         || "pytanie 1"
-        2  || "odpowiedz 2" || "EMPTY"         || "pytanie 2"
-        3  || "odpowiedz 3" || "EMPTY"         || "pytanie 3"
-        4  || "odpowiedz 4" || "EMPTY"         || "pytanie 4"
-        5  || "odpowiedz 5" || "EMPTY"         || "pytanie 5"
-        6  || "odpowiedz 6" || "EMPTY"         || "pytanie 6"
+        id | answers       | difficultyLevel | questions
+        1  | "odpowiedz 1" | "EMPTY"         | "pytanie 1"
+        2  | "odpowiedz 2" | "EMPTY"         | "pytanie 2"
+        3  | "odpowiedz 3" | "EMPTY"         | "pytanie 3"
+        4  | "odpowiedz 4" | "EMPTY"         | "pytanie 4"
+        5  | "odpowiedz 5" | "EMPTY"         | "pytanie 5"
+        6  | "odpowiedz 6" | "EMPTY"         | "pytanie 6"
     }
 
     def "should read all questions from database"() {
@@ -92,11 +88,13 @@ class DataBaseCrudTest extends Specification {
         6  || "odpowiedz 6" || "EMPTY"         || "pytanie 6"
     }
 
+    //TODO mock dla metody i test na porównanie obiektów!
     def "ReadRandomQuestion"() {
         when:
         def question = crud.readRandomQuestion()
         then:
         question instanceof  Question
+        false
     }
 
     def "Remove"() {
@@ -113,10 +111,11 @@ class DataBaseCrudTest extends Specification {
         given:
         def questions = crud.readAll().asList()
         when:
-        for (int i = 0; i < questions.size(); i++) {
-            crud.remove(i + 1)
+        for (int i = 1; i <= questions.size(); i++) {
+            crud.remove(i)
         }
         then:
+        print crud.readAll().asList()
         crud.readAll().asList().isEmpty()
     }
 

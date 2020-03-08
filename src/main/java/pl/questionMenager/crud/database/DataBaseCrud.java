@@ -11,6 +11,7 @@ import pl.questionMenager.model.DifficultyLevel;
 import pl.questionMenager.model.Question;
 import pl.questionMenager.transformer.database.DataBaseTransformerFactory;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -54,7 +55,7 @@ public class DataBaseCrud implements Crud {
 
     @Override
     public void create(DifficultyLevel difficultyLevel, String question, String answer) {
-        //session.getSession().beginTransaction();
+        session.beginTransaction();
         try {
             session.save(new Question(question, answer, difficultyLevel));
             session.getTransaction().commit();
@@ -93,7 +94,7 @@ public class DataBaseCrud implements Crud {
             session.getTransaction().commit();
             logger.info("all question with difficult level: " + difficultyLevel + " were downloaded from database");
         } catch (Exception e) {
-            logger.warning(e.getStackTrace() + "");
+            logger.warning(Arrays.toString(e.getStackTrace()) + "");
         }
         return questions;
     }
