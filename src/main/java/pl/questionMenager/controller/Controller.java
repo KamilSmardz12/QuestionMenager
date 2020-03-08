@@ -1,7 +1,6 @@
 package pl.questionMenager.controller;
 
 import org.hibernate.SessionFactory;
-import pl.questionMenager.crud.Crud;
 import pl.questionMenager.crud.database.DataBaseCrud;
 import pl.questionMenager.crud.file.JsonCrud;
 import pl.questionMenager.model.DataType;
@@ -14,7 +13,6 @@ import pl.questionMenager.user.UserProperties;
 import pl.questionMenager.view.View;
 
 import static pl.questionMenager.controller.PobieraczDanych.logIn;
-import static pl.questionMenager.utils.TransformerUtils.isDataBaseTEST;
 import static pl.questionMenager.utils.TransformerUtils.isJsonData;
 
 public class Controller {
@@ -28,31 +26,21 @@ public class Controller {
     public void closeConnection(DataType dataType) {
         if (isJsonData(dataType)) {
             transformerFactory.save(crud.readAll());
-        } else if (isDataBaseTEST(dataType)) {
-            sessionFactory.close();
         } else {
             sessionFactory.close();
         }
     }
-
-    public static Crud createSuitableConnectionForH2(DataType dataType){
-        sessionFactory = new DataBaseTransformerFactory().connestH2();
-        crud = new DataBaseCrud(dataType);
-        return crud;
-    }
-
-    public static void closeConnectionH2(){
-        sessionFactory.close();
-    }
-
 
 
     private void createSuitableConnection(DataType dataType) {
         if (isJsonData(dataType)) {
             transformerFactory = new JsonTransformerFactory();
             crud = new JsonCrud(transformerFactory.read());
-        } else {
+        } else if (DataType.HIBERNATE == dataType) {
             sessionFactory = new DataBaseTransformerFactory().connect();
+            crud = new DataBaseCrud(dataType);
+        } else {
+            sessionFactory = new DataBaseTransformerFactory().connestH2();
             crud = new DataBaseCrud(dataType);
         }
     }

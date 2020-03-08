@@ -1,25 +1,20 @@
 package pl.questionMenager.crud.database
 
-import pl.questionMenager.controller.Controller
+
 import pl.questionMenager.crud.Crud
 import pl.questionMenager.model.DataType
 import pl.questionMenager.model.DifficultyLevel
 import pl.questionMenager.model.Question
-import spock.lang.Shared
 import spock.lang.Specification
 
 class DataBaseCrudTest extends Specification {
 
-   static Crud crud = new DataBaseCrud(DataType.H2)
+    static Crud crud = new DataBaseCrud(DataType.H2)
 
-    def setup(){
+    def setup() {
         crud.getSession().beginTransaction()
         crud.getSession().createSQLQuery("DELETE TABLE Questions")
         crud.getSession().getTransaction().commit()
-    }
-
-    def cleanupSpec() {
-        Controller.closeConnectionH2()
     }
 
     def "Create method should save question(question: test 1,answer: test 1) "() {
@@ -92,9 +87,11 @@ class DataBaseCrudTest extends Specification {
     def "ReadRandomQuestion"() {
         when:
         def question = crud.readRandomQuestion()
+        Question expectedQuestion = new Question(...)
+        Random r = Mock(Random)
+        r.nextInt() << 1
         then:
-        question instanceof  Question
-        false
+        question = expectedQuestion
     }
 
     def "Remove"() {
