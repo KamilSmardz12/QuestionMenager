@@ -4,10 +4,7 @@ import pl.questionMenager.crud.Crud;
 import pl.questionMenager.model.DifficultyLevel;
 import pl.questionMenager.model.Question;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 //TODO ograć puste pola (tam gdzie null)
@@ -157,5 +154,15 @@ public class JsonCrud implements Crud {
 
         System.out.printf("New id generated: %d%n", newId);
         return ++newId;
+    }
+
+
+    @Override
+    public boolean idExist(int id) {
+        boolean exist = false;
+        if (questions.keySet().contains(id)){
+            exist = true;
+        }
+        return exist;
     }
 }

@@ -12,17 +12,23 @@ import pl.questionMenager.user.User;
 import pl.questionMenager.user.UserProperties;
 import pl.questionMenager.view.View;
 
+import java.util.Scanner;
+
 import static pl.questionMenager.controller.PobieraczDanych.logIn;
 import static pl.questionMenager.utils.TransformerUtils.isJsonData;
 
 public class Controller {
 
-    private static TransformerFactory transformerFactory;
-    private static SessionFactory sessionFactory;
-    private static pl.questionMenager.crud.Crud crud;
-    private static View view = new View();
-    private static UserProperties userProperties;
+    private TransformerFactory transformerFactory;
+    private SessionFactory sessionFactory;
+    private pl.questionMenager.crud.Crud crud;
+    private View view = new View();
+    private UserProperties userProperties;
+    private boolean loopProgram = true;
+    private Scanner sc = new Scanner(System.in);
 
+
+    //TODO zautomatyzowac, nazwa klasy.class w if albo null ??
     public void closeConnection(DataType dataType) {
         if (isJsonData(dataType)) {
             transformerFactory.save(crud.readAll());
@@ -49,6 +55,15 @@ public class Controller {
         return new User(sessionFactory).getUserProperties(login, password);
     }
 
+    private void stillWorking() {
+        System.out.println("jezeli chcesz zakonczyc program wpisz TAK. Natomiast NIE jesli chcesz aby program dalej działał");
+        if (sc.nextLine().toLowerCase().equals("tak")) {
+            this.loopProgram = false;
+            view.goodBye();
+        } else {
+            this.loopProgram = true;
+        }
+    }
 
     public void start() {
         view.welcome();
@@ -58,19 +73,27 @@ public class Controller {
         view.login();
         DataToLogin dataToLogin = logIn();
         UserProperties user = getUser(dataToLogin.getLogin(), dataToLogin.getPassword(), sessionFactory);
-        switch (user.getPrivileges()) {
-            case USER_WITH_PRIVILEGES_TO_ADD:
-                //view.interfejsDlaUD();
-                //createSuitableConnection();
-                break;
-            case ADMIN:
-                //view.interfejsDlaADMINA();
-                break;
-            default:
-
-                view.defaulte(crud);
+        if (user != null) {
+            while (loopProgram) {
+                switch (user.getPrivileges()) {
+                    case 1: //user
+                        view.userInterface();
+                        break;
+                    case 2: //user with right do add question
+                        break;
+                    case 3: //admin
+                        view.adminInterface(crud);
+                        //view.interfejsDlaADMINA();
+                        //break;
+                    default:
+                        //view.defaulte(crud);
+                }
+                stillWorking();
+            }
+        } else {
+            System.out.println("nie znaleziono uzytkownika");
+            start();
         }
-        view.selectData();
 
     }
 }

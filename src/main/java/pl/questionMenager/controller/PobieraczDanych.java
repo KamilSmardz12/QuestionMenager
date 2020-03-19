@@ -10,9 +10,13 @@ public class PobieraczDanych {
     private static final Scanner sc = new Scanner(System.in);
 
     public static DataToLogin logIn() {
+        System.out.println("podaj login: ");
+        String login = sc.next();
+        System.out.println("podaj haslo: ");
+        String password = sc.next();
         return DataToLogin.builder()
-                .login(sc.nextLine())
-                .password(sc.nextLine())
+                .login(login)
+                .password(password)
                 .build();
     }
 

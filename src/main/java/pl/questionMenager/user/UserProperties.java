@@ -18,5 +18,6 @@ public class UserProperties {
     private final String name;
     private final String login;
     private final String password;
-    private final Privilege privileges;
+    //private final Privilege privileges;
+    private final Integer privileges;
 }

@@ -87,11 +87,11 @@ class DataBaseCrudTest extends Specification {
     def "ReadRandomQuestion"() {
         when:
         def question = crud.readRandomQuestion()
-        Question expectedQuestion = new Question(...)
+        Question expectedQuestion = new Question()
         Random r = Mock(Random)
         r.nextInt() << 1
         then:
-        question = expectedQuestion
+        question == expectedQuestion
     }
 
     def "Remove"() {

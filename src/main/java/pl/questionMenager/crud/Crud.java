@@ -33,4 +33,6 @@ public interface Crud {
 
     void updateAnswerAndQuestion(int id, String answer, String question);
 
+    public boolean idExist(int id);
+
 }

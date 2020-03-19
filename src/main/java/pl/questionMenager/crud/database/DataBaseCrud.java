@@ -4,6 +4,7 @@ import com.sun.istack.NotNull;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.NativeQuery;
 import pl.questionMenager.configuration.LoggerConfig;
 import pl.questionMenager.crud.Crud;
 import pl.questionMenager.model.DataType;
@@ -99,7 +100,7 @@ public class DataBaseCrud implements Crud {
         return questions;
     }
 
-    private List<Question> createQuestions( List<Object[]> resultList) {
+    private List<Question> createQuestions(List<Object[]> resultList) {
         List<Question> questions = new LinkedList<>();
         for (Object[] object : resultList) {
             questions.add(new Question(
@@ -226,5 +227,22 @@ public class DataBaseCrud implements Crud {
             logger.warning("something gone wrong, transaction is rollback || " + e.getStackTrace().toString());
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean idExist(int id) {
+        session.getTransaction();
+        List<Integer> resultList = null;
+        boolean exitst = false;
+        try {
+            resultList = session.createSQLQuery("SELECT q.idQuestion FROM Questions AS q WHERE q.idQuestion = " + id).getResultList();
+            if (id == resultList.get(0)){
+                exitst = true;
+            }
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            logger.warning("Something gone wrong, transaction is rollbask || " + Arrays.toString(e.getStackTrace()));
+        }
+        return exitst;
     }
 }

@@ -2,7 +2,10 @@ package pl.questionMenager.user;
 
 import lombok.RequiredArgsConstructor;
 
+import javax.persistence.Entity;
+
 @RequiredArgsConstructor
+@Entity
 public enum Privilege {
     DEFAULT("defaultUse","read"),
     ADMIN("admin","admin"), // Only admin has privilege to delete question
