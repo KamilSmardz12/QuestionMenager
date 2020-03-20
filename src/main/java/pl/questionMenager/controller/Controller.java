@@ -28,6 +28,44 @@ public class Controller {
     private Scanner sc = new Scanner(System.in);
 
 
+    public void start() {
+        view.welcome();
+        view.selectData();
+        DataType dataType = PobieraczDanych.checkDataType();
+        createSuitableConnection(dataType);
+
+        if (dataType.equals(DataType.HIBERNATE)){
+            //view.login();
+            DataToLogin dataToLogin = logIn();
+            UserProperties user = getUser(dataToLogin.getLogin(), dataToLogin.getPassword(), sessionFactory);
+            if (user != null) {
+                while (loopProgram) {
+                    switch (user.getPrivileges()) {
+                        case 1: //user
+                            view.userInterface(crud);
+                            break;
+                        case 2: //user with right do add question
+                            view.userInterfaceWithRightToAdd(crud);
+                            break;
+                        case 3: //admin
+                            view.adminInterface(crud);
+                            break;
+                        default:
+                            //view.defaulte(crud);
+                    }
+                    stillWorking();
+                }
+            } else {
+                System.out.println("nie znaleziono uzytkownika");
+                start();
+            }
+        } else {
+            System.out.println("for file interface");
+        }
+
+
+    }
+
     //TODO zautomatyzowac, nazwa klasy.class w if albo null ??
     public void closeConnection(DataType dataType) {
         if (isJsonData(dataType)) {
@@ -65,35 +103,5 @@ public class Controller {
         }
     }
 
-    public void start() {
-        view.welcome();
-        view.selectData();
-        DataType dataType = PobieraczDanych.checkDataType();
-        createSuitableConnection(dataType);
-        view.login();
-        DataToLogin dataToLogin = logIn();
-        UserProperties user = getUser(dataToLogin.getLogin(), dataToLogin.getPassword(), sessionFactory);
-        if (user != null) {
-            while (loopProgram) {
-                switch (user.getPrivileges()) {
-                    case 1: //user
-                        view.userInterface();
-                        break;
-                    case 2: //user with right do add question
-                        break;
-                    case 3: //admin
-                        view.adminInterface(crud);
-                        //view.interfejsDlaADMINA();
-                        //break;
-                    default:
-                        //view.defaulte(crud);
-                }
-                stillWorking();
-            }
-        } else {
-            System.out.println("nie znaleziono uzytkownika");
-            start();
-        }
 
-    }
 }
